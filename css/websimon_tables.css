@@ -1,0 +1,85 @@
+/* style for websimon tables admin panel */
+
+#plugin-navigation {
+    padding: 16px 0;
+}
+#admin-panel-max-600 {
+    margin: 15px 0 0;
+    max-width: 600px;
+}
+#admin-panel-max-800 {
+    margin: 15px 0 0;
+    max-width: 800px;
+}
+#admin-panel-max-800 .inside {
+    height: 324px;
+}
+
+#admin-left {
+    float: left;
+    height: 286px;
+    width: 204px;
+}
+#admin-right {
+    border-left: 1px solid #CCCCCC;
+    float: left;
+    padding: 0 0 0 19px;
+    width: 173px;
+}
+.inside p.admin-activate-advanced {
+    background: none repeat scroll 0 0 #FFFFCC;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    padding: 10px;
+}
+h3.admin-above-wide-table {
+    background: none repeat scroll 0 0 #CCCCCC;
+    border-color: #EEEEEE;
+    border-radius: 5px 5px 0 0;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin: 0 0 0 22px;
+    max-width: 419px;
+    padding: 7px 10px;
+    text-shadow: 0 1px 0 #FFFFFF;
+    text-transform: uppercase;
+}
+
+#single-table-wrapper {
+	max-width: 800px;
+}
+
+.admin-select-style {
+    min-width: 100px;
+}
+.table-row-explan {
+    background: none repeat scroll 0 0 #DAF3FF;
+}
+.cell-content {
+	font-size:12px;
+}
+.admin-checkbox {}
+p.admin-float-right {
+    float: right;
+    width: 200px;
+}
+h5.admin-float-right {}
+
+#admin-colorpicker.color {
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    width: 139px;
+}
+#contribute {
+    padding: 10px;
+	margin: 10px 0 0 0;
+	width: 580px;
+    border-radius: 5px;
+	border: 1px solid #CCCCCC;
+}
+
+
