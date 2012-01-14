@@ -3,7 +3,7 @@
 Plugin Name: Websimon Tables
 Plugin URI: http://websimon.se/websimon-tables
 Description: Create and style tables for wordpress posts and pages
-Version: 1.0
+Version: 1.01
 Author: Simon Rybrand
 Author URI: http://websimon.se
 */
@@ -178,15 +178,15 @@ function websimon_tables_register_scripts () {
 }
 
 /*
-Installs the table wp_websimon_tables 
+* Installs the table wp_websimon_tables 
 */
 function websimon_tables_install_plugin() {
-	$websimon_tables_db_version = "1.0";
-	$websimon_tables_version = "1.0";
-	$installed_ver = get_option( "websimon_tables_db_version" );
-
 	global $wpdb;
-		if( $installed_ver != $websimon_tables_db_version ) {
+	$websimon_tables_db_version = "1.01";
+	$websimon_tables_version = "1.01";
+	$installed_version = get_option( "websimon_tables_db_version" );
+	
+	if ( $installed_version != $websimon_tables_db_version ) {
 		$table_name = $wpdb->prefix . "websimon_tables";
 		$sql = "CREATE TABLE " . $table_name . " (
 		  id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -205,35 +205,35 @@ function websimon_tables_install_plugin() {
 	   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	   dbDelta($sql);
 	   
-	   add_option("websimon_tables_db_version", $websimon_tables_db_version);
-	   add_option("websimon_tables_version", $websimon_tables_version);
+	add_option("websimon_tables_db_version", $websimon_tables_db_version);
+	add_option("websimon_tables_version", $websimon_tables_version);
 	}
 }
 
 /*
-Updates for database and version of plugin in the future 
+* Updates for database and version of plugin in the future 
 */
 function websimon_tables_update_function() {
 
+	$websimon_tables_version = '1.01';
+	$websimon_tables_db_version = '1.01';
+
     if (get_site_option('websimon_tables_db_version') != $websimon_tables_db_version) {
-        //do updates on database
-		//no yet....
-		//update option websimon_tables_db_version
+       update_option('websimon_tables_db_version', $websimon_tables_db_version);
     }
 	if (get_site_option('websimon_tables_version') != $websimon_tables_version) {
-        //do updates
-		//no yet....
-		//update option websimon_tables_version
-    }
-		
+      	update_option('websimon_tables_version', $websimon_tables_db_version);
+    }	
 }
 /*
-Removes the the table wp_websimon_tables if plugin is uninstalled
+* Removes the the table wp_websimon_tables if plugin is uninstalled
+* Romoves the options related to the plugin
 */
 function websimon_tables_uninstall_plugin () {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "websimon_tables";
 	$wpdb->query("DROP TABLE IF EXISTS $table_name");
+	delete_option("websimon_tables_db_version");
+	delete_option("websimon_tables_version");
 }
-
 ?>
