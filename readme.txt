@@ -2,9 +2,9 @@
 Contributors: Websimon
 Donate link: http://websimon.se/websimon-tables#donate
 Tags: table, tables, css, design, html table, custom tables
-Requires at least: 2.0.2
-Tested up to: 3.3
-Stable tag: 1.0
+Requires at least: 2.0.3
+Tested up to: 3.3.1
+Stable tag: 1.01
 
 A plugin to create, manage and design tables within wordpress. 
 Choose between readymade skins or make your own custom table CSS design.
@@ -35,12 +35,17 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 
 == Changelog ==
 
-* No changes yet.
+= Version 1.01 =
+* Small fixes with uninstall routines. Now the plugin table and the related options is deleted when plugin is deleted.
+* Added som more save buttons when editing table content for tables with lots of information. 
 
 = 1.0 =
 * The plugin is released
 
 == Upgrade Notice ==
+
+= 1.01 =
+This upgrade is small but important. Before the datase data was deleted when plugin was deactivated. Now it is deleted when plugin is uninstalled and deleted. 
 
 = 1.0 =
 The plugin is released
