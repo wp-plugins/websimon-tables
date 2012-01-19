@@ -29,15 +29,16 @@ echo '
 </h2>
 		
 		<h2>Edit content for ' . $name . '</h2>	
+		
+			<p class="submit">
+		<input type="submit" value="Save Table Content" class="button-secondary" />
+
+	</p>
 '
 
 ;
 
-echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
-<p class="submit">
-<input type="submit" value="Save Table Content" class="button-secondary" />
-</p>
-';
+echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">';
 //nonce security check
 wp_nonce_field('table-content', 'nonce_table_content');
 
@@ -98,18 +99,19 @@ echo '</tbody></table>
 		<input type="hidden" name="edit_hidden_content"/>
 		<input type="hidden" name="edit_hidden_content_id" value="' . $this_id . '"/>
 	</p>
-';
+	';
 echo '<p>preview (May look different on your site)';
 echo 
 '<div style="max-width:600px;">' . 
 do_shortcode($shortcode)
-. '</div></p>
-
+. '
 <p class="submit">
-<input type="submit" value="Save Table Content" class="button-secondary" />
-</p>
-</form>';
-echo '
+		<input type="submit" value="Save Table Content" class="button-secondary" />
+
+	</p>
+</form>
+
+</div></p>
 <div id="contribute">
 <h4>Please donate 10$</h4>
 If you donate 10$ to this projekt you will encourage further develepment and updates for this plugin.
@@ -121,4 +123,5 @@ If you donate 10$ to this projekt you will encourage further develepment and upd
 </form>
 </div>
 ';
+
 ?>
