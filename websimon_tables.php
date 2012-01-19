@@ -3,7 +3,7 @@
 Plugin Name: Websimon Tables
 Plugin URI: http://websimon.se/websimon-tables
 Description: Create and style tables for wordpress posts and pages
-Version: 1.01
+Version: 1.0
 Author: Simon Rybrand
 Author URI: http://websimon.se
 */
@@ -25,7 +25,7 @@ add_shortcode('ws_table', 'websimon_tables_shortcode'); //shortcode function
 register and unregister hooks
 */
 register_activation_hook(__FILE__,'websimon_tables_install_plugin');
-register_deactivation_hook(__FILE__, 'websimon_tables_uninstall_plugin');
+register_uninstall_hook(__FILE__, 'websimon_tables_uninstall_plugin');
 
 /*
 creates the content for the shortcode
@@ -178,56 +178,50 @@ function websimon_tables_register_scripts () {
 }
 
 /*
-* Installs the table wp_websimon_tables 
+Installs the table wp_websimon_tables 
 */
 function websimon_tables_install_plugin() {
+	$websimon_tables_db_version = "1.0";
+	$websimon_tables_version = "1.0";
 	global $wpdb;
-	$websimon_tables_db_version = "1.01";
-	$websimon_tables_version = "1.01";
-	$installed_version = get_option( "websimon_tables_db_version" );
-	
-	if ( $installed_version != $websimon_tables_db_version ) {
-		$table_name = $wpdb->prefix . "websimon_tables";
-		$sql = "CREATE TABLE " . $table_name . " (
-		  id mediumint(9) NOT NULL AUTO_INCREMENT,
-		  tablename VARCHAR(150) DEFAULT '' NOT NULL,
-		  shortcode VARCHAR(500) DEFAULT '' NOT NULL,
-		  rows VARCHAR(500) DEFAULT '' NOT NULL,
-		  cols VARCHAR(500) DEFAULT '' NOT NULL,
-		  style VARCHAR(500) DEFAULT '' NOT NULL,
-		  design TEXT(5000) DEFAULT '' NOT NULL,
-		  advanced TEXT(5000) DEFAULT '' NOT NULL,
-		  headlines TEXT(5000) DEFAULT '' NOT NULL,
-		  content TEXT(100000) DEFAULT '' NOT NULL,
-		  UNIQUE KEY id (id)
-		) ENGINE=MyISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1 ;";
+
+	$table_name = $wpdb->prefix . "websimon_tables";
+	$sql = "CREATE TABLE " . $table_name . " (
+	  id mediumint(9) NOT NULL AUTO_INCREMENT,
+	  tablename VARCHAR(150) DEFAULT '' NOT NULL,
+	  shortcode VARCHAR(500) DEFAULT '' NOT NULL,
+	  rows VARCHAR(500) DEFAULT '' NOT NULL,
+	  cols VARCHAR(500) DEFAULT '' NOT NULL,
+	  style VARCHAR(500) DEFAULT '' NOT NULL,
+	  design TEXT(5000) DEFAULT '' NOT NULL,
+	  advanced TEXT(5000) DEFAULT '' NOT NULL,
+	  headlines TEXT(5000) DEFAULT '' NOT NULL,
+	  content TEXT(100000) DEFAULT '' NOT NULL,
+	  UNIQUE KEY id (id)
+	) ENGINE=MyISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1 ;";
 		
-	   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	   dbDelta($sql);
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	dbDelta($sql);
 	   
 	add_option("websimon_tables_db_version", $websimon_tables_db_version);
 	add_option("websimon_tables_version", $websimon_tables_version);
-	}
 }
 
 /*
-* Updates for database and version of plugin in the future 
+Updates for database and version of plugin in the future 
 */
 function websimon_tables_update_function() {
 
-	$websimon_tables_version = '1.01';
-	$websimon_tables_db_version = '1.01';
-
     if (get_site_option('websimon_tables_db_version') != $websimon_tables_db_version) {
-       update_option('websimon_tables_db_version', $websimon_tables_db_version);
+		update_option("websimon_tables_db_version", '1.01');
     }
 	if (get_site_option('websimon_tables_version') != $websimon_tables_version) {
-      	update_option('websimon_tables_version', $websimon_tables_db_version);
-    }	
+        update_option("websimon_tables_version", '1.01');
+    }
+		
 }
 /*
-* Removes the the table wp_websimon_tables if plugin is uninstalled
-* Romoves the options related to the plugin
+Removes the the table wp_websimon_tables if plugin is uninstalled
 */
 function websimon_tables_uninstall_plugin () {
 	global $wpdb;
@@ -236,4 +230,5 @@ function websimon_tables_uninstall_plugin () {
 	delete_option("websimon_tables_db_version");
 	delete_option("websimon_tables_version");
 }
+
 ?>
