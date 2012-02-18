@@ -52,7 +52,6 @@ table#' . $id . ' {
     border-collapse: collapse;
 	border-width: 0px;
 	border-style: outset;
-    margin: 20px 0;
 	line-height: 2.0em;
     text-align: ' . $text_align . ';
     vertical-align: top;';
@@ -82,7 +81,7 @@ table#' . $id . ' thead tr th.' . $id . ' {
 ';
 $i = 1;
 while ($i <= $numcol) {
-	echo 'table#' . $id . ' thead tr th#' . $id . '.n' . $i . ' {
+	echo 'table#' . $id . ' thead tr th.' . $id . '#n' . $i . ' {
 	width: ' . $colwidths[$i-1] . ';
 	}';
 	$i++;
