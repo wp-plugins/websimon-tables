@@ -4,13 +4,12 @@ Donate link: http://websimon.se/websimon-tables#donate
 Tags: table, tables, css, design, html table, custom tables
 Requires at least: 2.0.3
 Tested up to: 3.3.1
-Stable tag: 1.01
+Stable tag: 1.02
 
 A plugin to create, manage and design tables within wordpress. 
 Choose between readymade skins or make your own custom table CSS design.
 
 == Description ==
-
 Websimon Tables lets you create and design tables within your wordpress admin panel. No knowledge about php, HTML or CSS is needed. You can create
 as many tables as you wish and create a unique design for each tables. You include the tables in your post or pages using a short and simple shortcode. 
 The tables can contain images or any type of html code so you can extend them for your own needs. 
@@ -27,13 +26,18 @@ You will find 'websimon tables' menu in your WordPress admin panel (in tools).
 == Frequently Asked Questions ==
 
 = Do you have a question? =
-This plugin is entirely new and you are welcome to contact this plugin author here: 
+You will find an FaQ here:
 http://websimon.se/websimon-tables#askaquestion
 
 == Screenshots ==
 If you want to see screenshots of this plugin please visit http://websimon.se/websimon-tables
 
 == Changelog ==
+
+= Version 1.02 =
+* New Feature - You are now able to copy a table
+* New feature - You are now able to add a picture in the table headline/table footer
+* Bugfix - Fixed custom column width on custom skin
 
 = Version 1.01 =
 * Small fixes with uninstall routines. Now the plugin table and the related options is deleted when plugin is deleted.
@@ -43,6 +47,10 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 * The plugin is released
 
 == Upgrade Notice ==
+
+= Version 1.02 =
+Two new features are added. You are now able to copy a table and add pictures to the table headline/footer. 
+Small Bugfixes
 
 = 1.01 =
 This upgrade is small but important. Before the datase data was deleted when plugin was deactivated. Now it is deleted when plugin is uninstalled and deleted. 
