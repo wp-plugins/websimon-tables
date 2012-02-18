@@ -82,6 +82,58 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table' ) )
 }
 }
 /*
+Copy entire Table
+*/
+if ($_GET['action'] == 'duplicate_table') {
+$nonce = $_GET['_wpnonce'];
+if ( empty($_GET) || !wp_verify_nonce($nonce, 'duplicate-table' ) )
+{
+   print 'Sorry, you cannot process data this way.';
+   exit;	
+} else {
+	$copy = get_option('websimon_tables_copy');
+	global $wpdb;
+	$table_name = $wpdb->prefix . "websimon_tables";
+	$duplicate_table = $_GET['duplicate_id'];
+	$result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$duplicate_table'");
+
+	foreach ($result as $results) {
+		$tablename = $results->tablename . $copy;
+		$rows = $results->rows;
+		$cols = $results->cols;
+		$style = $results->style;
+		$design = $results->design;
+		$advanced = $results->advanced;
+		$headlines = $results->headlines;
+		$content = $results->content;
+	}
+	$rows_affected = $wpdb->insert( $table_name, array( 
+										'tablename' => $tablename,
+										'rows' => $rows,
+										'cols' => $cols,
+										'style' => $style,										
+										'design' => $design,
+										'advanced' => $advanced,
+										'headlines' => $headlines,
+										'content' => $content
+										));
+	
+	$result = $wpdb->get_results("SELECT * FROM $table_name WHERE tablename='$tablename'");
+	foreach ($result as $results) {
+		$id = $results->id;
+		$shortcode = '[ws_table id="' . $id . '"]';
+	}
+	$copy = $copy+1;
+	update_option("websimon_tables_copy", $copy);
+	$wpdb->update( $table_name, array( 'shortcode' => $shortcode ), array( 'id' => $id ) );	
+	
+	header('Location: ' . get_bloginfo('wpurl') . '/wp-admin/tools.php?page=websimon_tables&updated=true');
+	exit;	
+}
+}
+
+
+/*
 Edit table content
 Saves the table content
 */
@@ -129,6 +181,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_table_content'],'table-cont
 		
 	while ($row_counter <= $numrow) { //concatenate the cells to variable $content
 		$col_counter = 1;
+		   
 		while ($col_counter <= $numcol) {
 			
 			if ($col_counter < $numcol) {

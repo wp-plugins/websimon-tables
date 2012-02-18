@@ -30,7 +30,7 @@ $jscript .= ']';
 				return false;
 			}
 		}
-		
+
 		function oc(a)
 		{
 		  var o = {};
@@ -165,6 +165,10 @@ echo '
 				echo '
 				<td><a href="?page=websimon_tables&action=edit_table&id=' . $results->id . '">Edit table Content</a> | 
 				<a href="?page=websimon_tables&action=edit_style&id=' . $results->id . '">Edit Structure and Style</a> |';
+				$nonce= wp_create_nonce('duplicate-table');
+				echo '
+				<a href="?page=websimon_tables&action=duplicate_table&duplicate_id=' . $results->id . '&_wpnonce=' . $nonce . '">Copy this table</a> | 
+				';
 				$nonce= wp_create_nonce('delete-table');
 				echo '
 				<a onclick="return deleteTable()" href="?page=websimon_tables&action=delete_table&delete_id=' . $results->id . '&_wpnonce=' . $nonce . '">Delete</a></td>

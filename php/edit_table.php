@@ -28,17 +28,15 @@ echo '
 <a class="nav-tab" href="' . get_bloginfo('wpurl') . '/wp-admin/tools.php?page=websimon_tables&action=edit_style&id=' . $this_id . '">Edit Table Structure & Style</a>
 </h2>
 		
-		<h2>Edit content for ' . $name . '</h2>	
+	<h2>Edit content for ' . $name . '</h2>';
+	
+	echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">	
 		
-			<p class="submit">
-		<input type="submit" value="Save Table Content" class="button-secondary" />
+		<p class="submit">
+			<input type="submit" value="Save Table Content" class="button-secondary" />
+		</p>';
 
-	</p>
-'
 
-;
-
-echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">';
 //nonce security check
 wp_nonce_field('table-content', 'nonce_table_content');
 
@@ -67,7 +65,7 @@ $thead_content = explode('[-|-]' , $headlines); //explode headlines
 echo '<tr class="table-header"><td class="table-row-explan">Table Headlines</td>';
 	while ($col_counter <= $numcol) { 
 		echo '<td>
-			<input style="width:100%;" name="head' . $col_counter . '" value="' . $thead_content[$col_counter-1] . '" type="text"/>
+			<textarea rows="1" style="height: 30px;width:100%;" name="head' . $col_counter . '" />' . stripslashes($thead_content[$col_counter-1]) . '</textarea>
 		</td>';	
 		$col_counter++;
 	}
@@ -85,7 +83,7 @@ while ($row_counter <= $numrow) {
 	$cell = explode('[-%cell%-]' , $tbody_content[$row_counter-1]); //explode each cell
 
 	while ($col_counter <= $numcol) {
-		echo '<td><textarea style="width:100%;min-height:100px;" name="cell' . $cell_counter . '" class="cell-content">' . stripslashes($cell[$col_counter-1]) . '</textarea></td>';
+		echo '<td><textarea style="width:100%;min-height:120px;" name="cell' . $cell_counter . '" class="cell-content">' . stripslashes($cell[$col_counter-1]) . '</textarea></td>';
 		$col_counter++;
 		$cell_counter++;
 		

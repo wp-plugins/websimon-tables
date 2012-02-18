@@ -3,7 +3,7 @@
 Plugin Name: Websimon Tables
 Plugin URI: http://websimon.se/websimon-tables
 Description: Create and style tables for wordpress posts and pages
-Version: 1.01
+Version: 1.02
 Author: Simon Rybrand
 Author URI: http://websimon.se
 */
@@ -63,7 +63,7 @@ function websimon_tables_shortcode ($atts){
 	$col_counter = 1;
 	$cell_counter = 1;
 	$class_counter = 1;
-	
+
 	//the table headlines
 	$table = '<table id="t' . $id . '">
 	<thead>
@@ -72,7 +72,7 @@ function websimon_tables_shortcode ($atts){
 				while ($col_counter <= $numcol) { 
 					$table .= '<th scope="col" class="t' . $id . '" ';
 					$table .= 'id="n' . $col_counter . '">';
-					$table .= $thead_content[$col_counter-1] . '</th>';	
+					$table .= stripslashes($thead_content[$col_counter-1]) . '</th>';	
 					$col_counter++;
 					$class_counter++;
 				}
@@ -84,7 +84,7 @@ function websimon_tables_shortcode ($atts){
 	$table .= '<tfoot><tr>';
 				$thead_content = explode('[-|-]' , $headlines); //explode headlines
 						while ($col_counter <= $numcol) { 
-							$table .= '<td>' . $thead_content[$col_counter-1] . '</td>';	
+							$table .= '<td>' . stripslashes($thead_content[$col_counter-1]) . '</td>';	
 							$col_counter++;
 						}
 						$col_counter = 1;
@@ -129,7 +129,7 @@ function websimon_tables_menu_items() {
 } 
 
 /*
-function that displays all admin pages
+*	function that displays all admin pages
 */
 function websimon_tables_plugin_page () { 
 	if (!current_user_can('manage_options'))  { 
@@ -149,14 +149,14 @@ function websimon_tables_plugin_page () {
 }
 
 /*
-Handles all requests to and from database
+*	Handles all requests to and from database
 */
 function websimon_tables_plugin_requests(){ 
 	require_once( 'php/requests.php' );
 }
 
 /*
-Adds links to stylesheet in admin pages
+*	Adds links to stylesheet in admin pages
 */
 function websimon_tables_admin_register_head() {
     $siteurl = get_option('siteurl');
@@ -167,7 +167,7 @@ function websimon_tables_admin_register_head() {
 }
 
 /*
-Adds the link to dynamic css
+*	Adds the link to dynamic css in head
 */
 function websimon_tables_register_scripts () { 
 	$plugin_url = get_option('siteurl') . '/wp-content/plugins/' . plugin_basename(dirname(__FILE__));
@@ -178,7 +178,7 @@ function websimon_tables_register_scripts () {
 }
 
 /*
-Installs the table wp_websimon_tables 
+*	Installs the table wp_websimon_tables 
 */
 function websimon_tables_install_plugin() {
 	$websimon_tables_db_version = "1.0";
@@ -202,26 +202,28 @@ function websimon_tables_install_plugin() {
 		
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	dbDelta($sql);
-	   
+	
 	add_option("websimon_tables_db_version", $websimon_tables_db_version);
 	add_option("websimon_tables_version", $websimon_tables_version);
 }
 
 /*
-Updates for database and version of plugin in the future 
+* Updates for database and versions of the plugin 
 */
 function websimon_tables_update_function() {
-
+	$websimon_tables_db_version = '1.02';
+	$websimon_tables_version = '1.02';
     if (get_site_option('websimon_tables_db_version') != $websimon_tables_db_version) {
-		update_option("websimon_tables_db_version", '1.01');
+		add_option('websimon_tables_copy', 1);
+		update_option("websimon_tables_db_version", '1.02');
     }
 	if (get_site_option('websimon_tables_version') != $websimon_tables_version) {
-        update_option("websimon_tables_version", '1.01');
+        update_option("websimon_tables_version", '1.02');
     }
-		
 }
 /*
-Removes the the table wp_websimon_tables if plugin is uninstalled
+*	Removes the the table wp_websimon_tables if plugin is uninstalled
+*	If plugin is inactivaded, nothing will be deleted
 */
 function websimon_tables_uninstall_plugin () {
 	global $wpdb;
