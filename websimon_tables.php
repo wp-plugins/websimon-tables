@@ -3,7 +3,7 @@
 Plugin Name: Websimon Tables
 Plugin URI: http://websimon.se/websimon-tables
 Description: Create and style tables for wordpress posts and pages
-Version: 1.02
+Version: 1.1.1
 Author: Simon Rybrand
 Author URI: http://websimon.se
 */
