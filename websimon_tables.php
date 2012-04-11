@@ -65,30 +65,33 @@ function websimon_tables_shortcode ($atts){
 	$class_counter = 1;
 
 	//the table headlines
-	$table = '<table id="t' . $id . '">
-	<thead>
-		<tr>';
-			$thead_content = explode('[-|-]' , $headlines); //explode headlines
-				while ($col_counter <= $numcol) { 
-					$table .= '<th scope="col" class="t' . $id . '" ';
-					$table .= 'id="n' . $col_counter . '">';
-					$table .= stripslashes($thead_content[$col_counter-1]) . '</th>';	
-					$col_counter++;
-					$class_counter++;
-				}
-	
+	$table = '<table id="t' . $id . '">';
+	if ($design_elements[15] != 'on') {
+		$table .= '
+		<thead>
+			<tr>';
+				$thead_content = explode('[-|-]' , $headlines); //explode headlines
+					while ($col_counter <= $numcol) { 
+						$table .= '<th scope="col" class="t' . $id . '" ';
+						$table .= 'id="n' . $col_counter . '">';
+						$table .= stripslashes($thead_content[$col_counter-1]) . '</th>';	
+						$col_counter++;
+						$class_counter++;
+					}
+		$table .= '</tr></thead>';
+	}
 	//the table footer
 	$col_counter = 1;
-	$table .= '</tr></thead>';
+	
 	if ($design_elements[1] == 'on') {
-	$table .= '<tfoot><tr>';
-				$thead_content = explode('[-|-]' , $headlines); //explode headlines
-						while ($col_counter <= $numcol) { 
-							$table .= '<td>' . stripslashes($thead_content[$col_counter-1]) . '</td>';	
-							$col_counter++;
-						}
-						$col_counter = 1;
-	$table .= '</tr></tfoot>';
+		$table .= '<tfoot><tr>';
+					$thead_content = explode('[-|-]' , $headlines); //explode headlines
+							while ($col_counter <= $numcol) { 
+								$table .= '<td>' . stripslashes($thead_content[$col_counter-1]) . '</td>';	
+								$col_counter++;
+							}
+							$col_counter = 1;
+		$table .= '</tr></tfoot>';
 	}
 	$table .= '
 	<tbody>';
@@ -99,7 +102,7 @@ function websimon_tables_shortcode ($atts){
 	//The content
 	$tbody_content = explode('[-%row%-]' , $content); //explode each row
 		while ($row_counter <= $numrow) {
-			if ($odd_row_counter%2) { $table .= '<tr class="table-alternate"> '; } else { $table .= '<tr>'; } 
+			if ($odd_row_counter%2) { $table .= '<tr class="table-alternate row' . $row_counter . '"> '; } else { $table .= '<tr class= "table-noalt row' . $row_counter . '">'; } 
 			$odd_row_counter++;
 			$col_counter = 1;
 			unset($cell);
@@ -142,7 +145,8 @@ function websimon_tables_plugin_page () {
 	elseif ($_GET['action'] && $_GET['action'] == 'edit_style') { 
 		require_once( 'php/edit_style.php' );
 	}
-	elseif ($_GET['action'] && $_GET['action'] == 'delete_row_col') { 
+	elseif ($_GET['action'] && $_GET['action'] == 'rename_table') { 
+		require_once( 'php/rename_table.php' );	
 	} else {
 		require_once( 'php/all_tables.php' );
 	}
@@ -211,14 +215,21 @@ function websimon_tables_install_plugin() {
 * Updates for database and versions of the plugin 
 */
 function websimon_tables_update_function() {
-	$websimon_tables_db_version = '1.02';
-	$websimon_tables_version = '1.02';
-    if (get_site_option('websimon_tables_db_version') != $websimon_tables_db_version) {
+	$websimon_tables_db_version = '1.1.1';
+	$websimon_tables_version = '1.1.1';
+	
+	$db_ver = get_site_option('websimon_tables_db_version');
+	$plug_ver = get_site_option('websimon_tables_version');
+    
+	if ($db_ver == '1.0' || $db_ver == '1.01') {
 		add_option('websimon_tables_copy', 1);
 		update_option("websimon_tables_db_version", '1.02');
     }
-	if (get_site_option('websimon_tables_version') != $websimon_tables_version) {
-        update_option("websimon_tables_version", '1.02');
+	if ($db_ver == '1.02') {
+		update_option("websimon_tables_db_version", '1.1.1');
+    }
+	if ($plug_ver != $websimon_tables_version) {
+        update_option("websimon_tables_version", '1.1.1');
     }
 }
 /*
@@ -231,6 +242,7 @@ function websimon_tables_uninstall_plugin () {
 	$wpdb->query("DROP TABLE IF EXISTS $table_name");
 	delete_option("websimon_tables_db_version");
 	delete_option("websimon_tables_version");
+	delete_option("websimon_tables_copy");
 }
 
 ?>
