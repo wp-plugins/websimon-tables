@@ -57,7 +57,7 @@ h3.admin-above-wide-table {
     min-width: 100px;
 }
 .table-row-explan {
-    background: none repeat scroll 0 0 #DAF3FF;
+    background: none repeat scroll 0 0 #EEEEEE;
 }
 .cell-content {
 	font-size:12px;
@@ -81,5 +81,9 @@ h5.admin-float-right {}
     border-radius: 5px;
 	border: 1px solid #CCCCCC;
 }
-
+#websimon-tables-message {
+	background: #FFFFF0;
+	padding: 3px;
+	border: 1px solid #EEEEEE;
+}
 
