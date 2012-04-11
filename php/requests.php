@@ -48,7 +48,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_all_tables'],'new_table') )
 
 	$rows_affected = $wpdb->insert( $table_name, array( 
 										'tablename' => $name , 'rows' => $rows , 'cols' => $cols, 'style' => 'minimalistwhite' , 
-										'design' => 'center;on;on;;on;;1.5;1.0;' . $colwidths . ';;;1.2;2.0;center;top',
+										'design' => 'center;on;on;;on;;1.5;1.0;' . $colwidths . ';;;1.2;2.0;center;top;',
 										'advanced' => ';;;FFFFFF;EEEEEE;FFFFFF;EEEEEE;FFFFFF;FCFCFC;000000;000000;000000;FFFFFF;CCCCCC' 
 										));
 	
@@ -81,6 +81,57 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table' ) )
 	exit;	
 }
 }
+
+/*
+Delete Table Content
+*/
+if ($_GET['action'] == 'delete_table_content') {
+$nonce = $_GET['_wpnonce'];
+if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table-content' ) )
+{
+   print 'Sorry, you cannot process data this way.';
+   exit;	
+} else {
+	global $wpdb;
+	$table_name = $wpdb->prefix . "websimon_tables";
+	$id = $_GET['delete_id'];
+	
+	$result = $wpdb->get_results("SELECT rows,cols,tablename FROM $table_name WHERE id='$id'");
+	foreach ($result as $results) {
+		$numrow = $results->rows;
+		$numcol = $results->cols;
+	}
+
+	//row and column counters
+	$row_counter = 1; 
+	$col_counter = 1;
+	
+	
+	while ($col_counter <= $numcol) { //concatenate the headlines to variable $headline
+		$headlines .= '[-|-]';
+		$col_counter++;
+	}
+	
+	$numcells = 1;
+		
+	while ($row_counter <= $numrow) { //concatenate the cells to variable $content
+		$col_counter = 1;
+		   
+		while ($col_counter <= $numcol) {
+			$content .= '[-%cell%-]';
+			$col_counter++;
+		}
+		if ($row_counter < $numrow) {
+			$content .= '[-%row%-]';
+		} 		
+		$row_counter++;
+	}
+	$wpdb->update( $table_name, array( 'headlines' => $headlines, 'content' => $content ), array( 'id' => $id ) );		
+	header('Location: ' . get_bloginfo('wpurl') . '/wp-admin/tools.php?page=websimon_tables&updated=true');
+	exit;	
+}
+}
+
 /*
 Copy entire Table
 */
@@ -132,7 +183,28 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'duplicate-table' ) )
 }
 }
 
-
+/*
+Rename table
+*/
+if (isset($_POST['rename_table_hidden'])) { 
+	
+if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_rename_table'],'rename_table') )
+{
+   print 'Sorry, you cannot process data this way.';
+   exit;
+}
+	else
+{
+	global $wpdb;
+	$table_name = $wpdb->prefix . "websimon_tables";
+	$id = $_POST['rename_table_id'];
+	$new_name = $_POST['rename_table_name'];
+	$wpdb->update( $table_name, array( 'tablename' => $new_name ), array( 'id' => $id ) );	
+	header('Location: ' . get_bloginfo('wpurl') . '/wp-admin/tools.php?page=websimon_tables&renamed=' . $id);
+	exit;	
+	
+}
+}
 /*
 Edit table content
 Saves the table content
@@ -145,7 +217,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_table_content'],'table-cont
    exit;
 }	
 	else
-{
+{	
 
 	$content = ''; //content string to be saved to the database
 	$headlines = ''; //headline string to be saved to the database
@@ -153,13 +225,11 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_table_content'],'table-cont
 	global $wpdb;
 	$table_name = $wpdb->prefix . "websimon_tables";
 	$result = $wpdb->get_results("SELECT rows,cols,tablename FROM $table_name WHERE id='$id'");
-	
 	foreach ($result as $results) {
 		$numrow = $results->rows;
 		$numcol = $results->cols;
 		$name = $results->tablename;
 	}
-	
 
 	//row and column counters
 	$row_counter = 1; 
@@ -205,6 +275,383 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_table_content'],'table-cont
 }
 }
 
+/* 
+Organize table content 
+- Delete content
+- add or delete columns 
+- add or delete rows
+- Move rows or columns
+*/
+if ($_GET['action'] == 'ws_organize_table_content') {
+$nonce = $_GET['_wpnonce'];
+if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
+{
+   print 'Sorry, you cannot process data this way.';
+   exit;	
+} else {
+	global $wpdb;
+	$table_name = $wpdb->prefix . "websimon_tables";
+	$id = $_GET['table_id'];
+	$organize = $_GET['organize'];
+	$result = $wpdb->get_results("SELECT headlines, content, rows, cols FROM $table_name WHERE id='$id'");
+	foreach ($result as $results) {
+		$old_content = $results->content;
+		$numrow = $results->rows;
+		$numcol = $results->cols;
+		$headlines = $results->headlines;
+	}
+	
+	//insert a new row
+	if ($organize == 'new_row') { 
+		$after_row = $_GET['after'];
+		$row_counter = 1;
+		$col_counter = 1;
+		$row_array = explode('[-%row%-]', $old_content);
+		
+		while ($row_counter <= $numrow) {
+			
+			if ($after_row == $row_counter) {
+				if ($row_counter == 1) { $new_content .= $row_array[$row_counter-1]; } else { $new_content .= '[-%row%-]' . $row_array[$row_counter-1]; }
+				$new_content .= '[-%row%-]';
+				while ($col_counter <= $numcol) {
+					$new_content .= '[-%cell%-]';
+					$col_counter++;
+				}
+			} else {
+				if ($row_counter == 1) { $new_content .= $row_array[$row_counter-1]; } else { $new_content .= '[-%row%-]' . $row_array[$row_counter-1]; }
+			}
+						
+			$row_counter++;
+		}
+		$wpdb->update( $table_name, array( 'rows' => $numrow+1, 'content' => $new_content ), array( 'id' => $id ) );	
+	
+	//insert a row at the top
+	} elseif ($organize == 'new_row_top') { 
+		$col_counter = 1;
+		while ($col_counter <= $numcol) {
+			$new_row .= '[-%cell%-]';
+			$col_counter++;
+		}
+		$new_row .= '[-%row%-]';
+		
+		$new_content = $new_row . $old_content;
+		$wpdb->update( $table_name, array( 'rows' => $numrow+1, 'content' => $new_content ), array( 'id' => $id ) );	
+		
+	//delete a row	
+	} elseif ($organize == 'delete_row') { 
+		$delete_row = $_GET['row_number'];
+		$row_counter = 1;
+		$col_counter = 1;
+		$row_array = explode('[-%row%-]', $old_content);
+		unset($row_array[$delete_row-1]);
+		$row_array = array_values($row_array);
+	
+		$i = 1;
+		foreach ($row_array as $row) {
+			if ($i == 1) {
+				$new_content .= $row_array[$i-1];
+			} else {
+				$new_content .= '[-%row%-]' . $row_array[$i-1];
+			}
+			$i++;
+		}
+
+		$wpdb->update( $table_name, array( 'rows' => $numrow-1, 'content' => $new_content ), array( 'id' => $id ) );	
+	
+	//Move a row upwards one step
+	} elseif ($organize == 'move_row_up') {
+		$move_row = $_GET['row_number'];
+		$row_array = explode('[-%row%-]', $old_content);
+		$row_counter = 1;
+		while ($row_counter <= $numrow) {
+			if ( ($row_counter + 1) == $move_row) {
+				$new_content .= $row_array[$row_counter] . '[-%row%-]' . $row_array[$row_counter-1];
+				if ($row_counter+1 != $numrow) {
+					$new_content .= '[-%row%-]';
+				}
+				$row_counter = $row_counter+2;
+			} else {
+				if ($row_counter == 1) {
+					$new_content .= $row_array[$row_counter-1] . '[-%row%-]'; 
+				} else {
+					if ($row_counter != $numrow) {
+						$new_content .= $row_array[$row_counter-1] . '[-%row%-]';
+					} else {
+						$new_content .= $row_array[$row_counter-1];
+					}
+					
+				}
+				$row_counter++;
+			}
+		}
+		$wpdb->update( $table_name, array( 'content' => $new_content ), array( 'id' => $id ) );		
+	
+	//Move a row one step down
+	} elseif ($organize == 'move_row_down') {
+		$move_row = $_GET['row_number'];
+		$row_array = explode('[-%row%-]', $old_content);
+		$row_counter = 1;
+		while ($row_counter <= $numrow) {
+			if ( $row_counter == $move_row) {
+				$new_content .= $row_array[$row_counter] . '[-%row%-]' . $row_array[$row_counter-1];
+				if ($row_counter != $numrow) {
+					$new_content .= '[-%row%-]';
+				}
+				$row_counter = $row_counter+2;
+			} else {
+				if ($row_counter == 1) {
+					$new_content .= $row_array[$row_counter-1] . '[-%row%-]'; 
+				} else {
+					if ($row_counter != $numrow) {
+						$new_content .= $row_array[$row_counter-1] . '[-%row%-]';
+					} else {
+						$new_content .= $row_array[$row_counter-1];
+					}
+					
+				}
+				$row_counter++;
+			}
+		}
+		$wpdb->update( $table_name, array( 'content' => $new_content ), array( 'id' => $id ) );		
+	
+	//insert a column to the left
+	} elseif ($organize == 'new_col_left') { //new column to the left
+		$insert_before = $_GET['before'];
+		$headlines_counter = 1;
+		
+		$headlines_array = explode('[-|-]', $headlines);
+		foreach ($headlines_array as $head) {
+			if ($headlines_counter == 1) {	
+				if ($insert_before == $headlines_counter) { 
+					$new_heads .= '[-|-]' . $head;
+				} else {
+					$new_heads .= $head;
+				}
+			} else {
+				if ($insert_before == $headlines_counter) { 
+					$new_heads .= '[-|-][-|-]' . $head;
+				} else {
+					$new_heads .= '[-|-]' . $head;
+				}
+			}
+			$headlines_counter++;
+		}
+		
+		$row_array = explode('[-%row%-]', $old_content);
+		$row_counter = 1;		
+		foreach ($row_array as $row) { 
+			$col_counter = 1;
+			$col_array = explode('[-%cell%-]',$row);
+			foreach ($col_array as $col) {
+				if ($col_counter == 1) {	
+					if ($insert_before == $col_counter) { 
+						$new_content .= '[-%cell%-]' . $col;
+					} else {
+						$new_content .= $col;
+					}
+				} else {
+					if ($insert_before == $col_counter) { 
+						$new_content .= '[-%cell%-][-%cell%-]' . $col;
+					} else {
+						$new_content .= '[-%cell%-]' . $col;
+					}
+				}
+				$col_counter++;
+			}
+			
+			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
+			$row_counter++;
+		}
+		$column_message = '&column_change=1';
+		$wpdb->update( $table_name, array( 'cols' => $numcol+1, 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
+		
+	} elseif ($organize == 'new_col_last') {
+		$row_counter = 1;		
+		$new_heads .= $headlines . '[-|-]';
+		$row_array = explode('[-%row%-]', $old_content);
+	
+		foreach ($row_array as $row) { 
+			$new_content .= $row . '[-%cell%-]';
+			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
+			$row_counter++;
+		}
+		$column_message = '&column_change=1';
+		$wpdb->update( $table_name, array( 'cols' => $numcol+1, 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
+	
+	//delete a column
+	} elseif ($organize == 'delete_col') {
+
+		$del_column = $_GET['column'];
+		$headlines_counter = 1;
+		
+		$headlines_array = explode('[-|-]', $headlines);
+		foreach ($headlines_array as $head) {
+			if ($headlines_counter == 1) {	
+				if ($del_column == $headlines_counter) { 
+					//do nothing
+				} else {
+					$new_heads .= $head;
+				}
+			} else {
+				if ($del_column == $headlines_counter) { 
+					//do nothing
+				} else {
+					if ($del_column == 1 && $headlines_counter == 2) { 
+						$new_heads .= $head; 
+					} else { 
+						$new_heads .= '[-|-]' . $head; 
+					}
+				}
+			}
+			$headlines_counter++;
+		}
+	
+		$row_array = explode('[-%row%-]', $old_content);
+		$row_counter = 1;		
+		foreach ($row_array as $row) { 
+			$col_counter = 1;
+			$col_array = explode('[-%cell%-]',$row);
+			foreach ($col_array as $col) {
+				if ($col_counter == 1) {	
+					if ($del_column == $col_counter) { 
+						//do nothing
+					} else {
+						$new_content .= $col;
+					}
+				} else {
+					if ($del_column == $col_counter) { 
+						//do nothing
+					} else {
+						if ($del_column == 1 && $col_counter == 2) { 
+							$new_content .= $col;
+						} else { 
+							$new_content .= '[-%cell%-]' . $col;
+						}
+					}
+				}
+				$col_counter++;
+			}
+			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
+			$row_counter++;
+		}
+		$column_message = '&column_change=1';
+		$wpdb->update( $table_name, array( 'cols' => $numcol-1, 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
+	
+	//move column one step left
+	} elseif ($organize == 'move_col_left') {
+		$move_column = $_GET['column'];
+		$headlines_counter = 1;
+		
+		$headlines_array = explode('[-|-]', $headlines);
+		while ($headlines_counter <= $numcol) {
+			if ($headlines_counter == 1) {
+				if ($headlines_counter+1 == $move_column) {
+					$new_heads .= $headlines_array[$headlines_counter] . '[-|-]' . $headlines_array[$headlines_counter-1];
+					$headlines_counter = $headlines_counter+2;
+				} else {
+					$new_heads .= $headlines_array[$headlines_counter-1];
+					$headlines_counter++;
+				}
+			} else {
+				if ($headlines_counter+1 == $move_column) {
+					$new_heads .= '[-|-]' . $headlines_array[$headlines_counter] . '[-|-]' . $headlines_array[$headlines_counter-1];
+					$headlines_counter = $headlines_counter+2;
+				} else {
+					$new_heads .= '[-|-]' .$headlines_array[$headlines_counter-1];
+					$headlines_counter++;
+				}
+			}
+		}		
+	
+		$row_array = explode('[-%row%-]', $old_content);
+		$row_counter = 1;		
+		foreach ($row_array as $row) { 
+			$col_counter = 1;
+			$col_array = explode('[-%cell%-]',$row);
+			while ($col_counter <= $numcol) {
+				if ($col_counter == 1) {
+					if ($col_counter+1 == $move_column) {
+						$new_content .= $col_array[$col_counter] . '[-%cell%-]' . $col_array[$col_counter-1];
+						$col_counter = $col_counter+2;
+					} else {
+						$new_content .= $col_array[$col_counter-1];
+						$col_counter++;
+					}
+				} else {
+					if ($col_counter+1 == $move_column) {
+						$new_content .= '[-%cell%-]' . $col_array[$col_counter] . '[-%cell%-]' . $col_array[$col_counter-1];
+						$col_counter = $col_counter+2;
+					} else {
+						$new_content .= '[-%cell%-]' .$col_array[$col_counter-1];
+						$col_counter++;
+					}
+				}
+			}		
+			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
+			$row_counter++;
+		}
+		$wpdb->update( $table_name, array( 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
+		
+	//move column one step right
+	} elseif ($organize == 'move_col_right') {
+		$move_column = $_GET['column'];
+		$headlines_counter = 1;
+		
+		$headlines_array = explode('[-|-]', $headlines);
+		while ($headlines_counter <= $numcol) {
+			if ($headlines_counter == 1) {
+				if ($headlines_counter == $move_column) {
+					$new_heads .= $headlines_array[$headlines_counter] . '[-|-]' . $headlines_array[$headlines_counter-1];
+					$headlines_counter = $headlines_counter+2;
+				} else {
+					$new_heads .= $headlines_array[$headlines_counter-1];
+					$headlines_counter++;
+				}
+			} else {
+				if ($headlines_counter == $move_column) {
+					$new_heads .= '[-|-]' . $headlines_array[$headlines_counter] . '[-|-]' . $headlines_array[$headlines_counter-1];
+					$headlines_counter = $headlines_counter+2;
+				} else {
+					$new_heads .= '[-|-]' .$headlines_array[$headlines_counter-1];
+					$headlines_counter++;
+				}
+			}
+		}		
+
+		$row_array = explode('[-%row%-]', $old_content);
+		$row_counter = 1;		
+		foreach ($row_array as $row) { 
+			$col_counter = 1;
+			$col_array = explode('[-%cell%-]',$row);
+			while ($col_counter <= $numcol) {
+				if ($col_counter == 1) {
+					if ($col_counter == $move_column) {
+						$new_content .= $col_array[$col_counter] . '[-%cell%-]' . $col_array[$col_counter-1];
+						$col_counter = $col_counter+2;
+					} else {
+						$new_content .= $col_array[$col_counter-1];
+						$col_counter++;
+					}
+				} else {
+					if ($col_counter == $move_column) {
+						$new_content .= '[-%cell%-]' . $col_array[$col_counter] . '[-%cell%-]' . $col_array[$col_counter-1];
+						$col_counter = $col_counter+2;
+					} else {
+						$new_content .= '[-%cell%-]' .$col_array[$col_counter-1];
+						$col_counter++;
+					}
+				}
+			}		
+			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
+			$row_counter++;
+		}
+
+		$wpdb->update( $table_name, array( 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
+	}
+	header('Location: ?page=websimon_tables&action=edit_table&id=' . $id . $column_message);
+	exit;	
+}
+}
 /*
 Edit basic table Design
 Saves the settings from "basic settings"
@@ -228,6 +675,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_basic_settings'],'basic-set
 	$fixed_width = $_POST['fixed_width']; 
 	$cell_padding = $_POST['cell_padding'];
 	$table_footer = $_POST['table_footer'];
+	$table_header = $_POST['table_header'];
 	$table_h_borders = $_POST['table_h_borders'];
 	$table_v_borders = $_POST['table_v_borders'];
 	$shadow_effect = $_POST['shadow_effect'];
@@ -252,7 +700,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_basic_settings'],'basic-set
 	
 	$design = $text_align . ';' . $table_footer . ';' . $table_h_borders . ';' . $table_v_borders . ';' . $shadow_effect . ';' . $hover_effect
 	. ';' . $font_size_h . ';' . $font_size_b . ';' . $colwidths . ';' . $fixed_width . ';' . $cell_padding . ';' . $line_height_b
-	. ';' . $line_height_h . ';' . $table_text_align_h . ';' . $v_text_align;
+	. ';' . $line_height_h . ';' . $table_text_align_h . ';' . $v_text_align . ';' . $table_header;
 
 	$wpdb->update( $table_name, array( 'rows' => $rows, 'cols' => $cols, 'style' => $style, 'design' => $design ), array( 'id' => $id ) );	
 	header('Location: ' . get_bloginfo('wpurl') . '/wp-admin/tools.php?page=websimon_tables&action=edit_style&id=' . $id . '');

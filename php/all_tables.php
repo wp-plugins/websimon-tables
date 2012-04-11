@@ -20,9 +20,19 @@ $jscript .= ']';
 	//javascript to validate form
 	echo '
 	<script type="text/javascript">
+		var deleteTableContent = function() {
+			var answer = confirm("Are you really sure that you want to delete all of the content of this table? This is not reversible!")
+			if (answer) {
+				return true;
+			}
+			else{
+				return false;
+			}
+		};
+		
 		
 		function deleteTable() {
-			var answer = confirm("Are you sure that you want to delete this table?")
+			var answer = confirm("Are you sure that you want to delete this table? This is not reversible!")
 			if (answer) {
 				return true;
 			}
@@ -73,18 +83,6 @@ $jscript .= ']';
 			
 		<h2>Websimon Tables</h2>';	
 echo '
-
-<div id="contribute">
-<h4>Please donate 10$</h4>
-If you donate 10$ to this projekt you will encourage further develepment and updates for this plugin.
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="QMBY63UZJE4TY">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/sv_SE/i/scr/pixel.gif" width="1" height="1">
-</form>
-</div>
-
 <form method="post" action="' . $_SERVER['REQUEST_URI'] . '" onsubmit="return checkForm()">';
 //nonce
 if ( function_exists('wp_nonce_field') ) {
@@ -152,14 +150,22 @@ echo '
 					</script>';
 			
 			foreach ($result as $results) {
-
-				if ($odd_row_counter%2) { echo '<tr class="alternate" colspan="5"> '; } else { echo '<tr colspan="5">'; } 
+				
+				if (isset($_GET['renamed']) && $_GET['renamed'] == $results->id) { 
+					$highlighter = 'style="background: #FFFFDB"'; 
+					$highlight_txt = '<br /><i>Renamed</i>'; 
+				} else { 
+					$highlighter = ''; 
+					$highlight_txt = ''; 
+				}
+			
+				if ($odd_row_counter%2) { echo '<tr class="alternate" ' . $highlighter . ' colspan="5"> '; } else { echo '<tr  ' . $highlighter . ' colspan="5">'; } 
 				$odd_row_counter++;
 				
 				echo '<td>' . $results->id . '</td>';
-				echo '<td>' . $results->tablename . '</td>';
+				echo '<td>' . $results->tablename . ' | <a href="?page=websimon_tables&action=rename_table&id=' . $results->id . '">Rename table</a>' . $highlight_txt . '</td>';
 				echo '<td>' . $results->rows . '&#215;' . $results->cols . '</td>';
-				echo '<td><input type="text" id="' . $i . '" onClick="SelectAll(' . $i . ');" value="' . htmlentities($results->shortcode) . '" style="width:270px;" /></td>';
+				echo '<td><input type="text" id="' . $i . '" onClick="SelectAll(' . $i . ');" value="' . htmlentities($results->shortcode) . '" style="width:170px;" /></td>';
 				$short = htmlentities("<?php echo do_shortcode('" . $results->shortcode . "'); ?>");
 				echo '<td><input type="text" id="' . $ii . '" onClick="SelectAll(' . $ii . ');" value="' . $short . '" style="width:270px;" /></td>';
 				echo '
@@ -171,13 +177,31 @@ echo '
 				';
 				$nonce= wp_create_nonce('delete-table');
 				echo '
-				<a onclick="return deleteTable()" href="?page=websimon_tables&action=delete_table&delete_id=' . $results->id . '&_wpnonce=' . $nonce . '">Delete</a></td>
+				<a onclick="return deleteTable()" href="?page=websimon_tables&action=delete_table&delete_id=' . $results->id . '&_wpnonce=' . $nonce . '">Delete</a> |
 				';
-				echo '</tr>';
+				$nonce= wp_create_nonce('delete-table-content');
+				echo '
+				<a onclick="return deleteTableContent()" href="?page=websimon_tables&action=delete_table_content&delete_id=' . $results->id . '&_wpnonce=' . $nonce . '">Delete Content</a></td>
+				';
+				echo '</td></tr>';
 				$i++;
 				$ii--;
 			}	
 		
 		echo '</tbody></table>
-		</div>';
+		
+<div id="contribute">
+<h4>Please donate 10$</h4>
+If you donate 10$ to this projekt you will encourage further develepment and updates for this plugin.
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="QMBY63UZJE4TY">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/sv_SE/i/scr/pixel.gif" width="1" height="1">
+</form>
+</div>
+<p>
+Plugin version: ' . get_site_option('websimon_tables_version') . '
+</p>
+</div>';
 ?>

@@ -35,6 +35,7 @@ $line_height_b = $design_elements[11];
 $line_height_h = $design_elements[12];
 $table_text_align_h = $design_elements[13];
 $v_text_align = $design_elements[14];
+if ($design_elements[15] == 'on') { $header_on = 'checked'; };
 
 //Javascript to validate form correctly
 echo '
@@ -127,8 +128,9 @@ echo '
 								<input name="table_h_borders" type="checkbox" class="admin-checkbox" ' . $table_h_borders_on . ' style="width: 15%;"/>Show horizontal borders<br />
 								<input name="table_v_borders" type="checkbox" class="admin-checkbox" ' . $table_v_borders_on . ' style="width: 15%;"/>Show vertical borders<br />
 								<input name="shadow_effect" type="checkbox" class="admin-checkbox" ' . $shadow_effect_on . ' style="width: 15%;"/>CSS3 Shadow effect 
-								<img style="cursor:pointer;" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/websimon_tables/images/questionmark.png" onClick="explan_shadow()" title="Adds a shadow around the table. No support in IE8 and lower"><br />
+								<img style="cursor:pointer;" src="' . get_bloginfo('wpurl') . '/wp-content/plugins/websimon-tables/images/questionmark.png" onClick="explan_shadow()" title="Adds a shadow around the table. No support in IE8 and lower"><br />
 								<input name="hover_effect" type="checkbox" class="admin-checkbox" ' . $hover_effect_on . ' style="width: 15%;"/>Hover effect<br />
+								<input name="table_header" type="checkbox" class="admin-checkbox" ' . $header_on . ' style="width: 15%;"/>Remove Header<br />
 							</p>
 								<p>
 								Skin:

@@ -79,7 +79,7 @@
 						<div id="admin-left">
 							
 							<p>
-								<script type="text/javascript" src="' . get_option('siteurl') . '/wp-content/plugins/websimon_tables/js/jscolor/jscolor.js"></script>
+								<script type="text/javascript" src="' . get_option('siteurl') . '/wp-content/plugins/websimon-tables/js/jscolor/jscolor.js"></script>
 								<h4>Gradient Colors header:</h4>
 								Start color: <input name="start_color_h" class="color" id="admin-colorpicker" value="' . $startcol . '" /><br />
 								End color: <input name="end_color_h" class="color" id="admin-colorpicker" value="' . $endcol . '" /><br />
