@@ -35,9 +35,9 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 == Changelog ==
 
 = Version 1.1.1 =
-* New Feature - It´s now possible to change the table name.
+* New Feature - Its now possible to change the table name.
 * New Feature - You can now disable the table header.
-* New Feature - It´s now possible to empty a tables content without changing the structure and design.
+* New Feature - Its now possible to empty a tables content without changing the structure and design.
 * New Feature - You can move rows up and down.
 * New Feature - You can move columns left and right
 * New Feature - You can add rows and columns inside of a table
