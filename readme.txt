@@ -4,7 +4,7 @@ Donate link: http://websimon.se/websimon-tables#donate
 Tags: table, tables, css, design, html table, custom tables
 Requires at least: 2.0.3
 Tested up to: 3.3.1
-Stable tag: 1.02
+Stable tag: 1.1.1
 
 A plugin to create, manage and design tables within wordpress. 
 Choose between readymade skins or make your own custom table CSS design.
@@ -34,6 +34,18 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 
 == Changelog ==
 
+= Version 1.1.1 =
+* New Feature - It´s now possible to change the table name.
+* New Feature - You can now disable the table header.
+* New Feature - It´s now possible to empty a tables content without changing the structure and design.
+* New Feature - You can move rows up and down.
+* New Feature - You can move columns left and right
+* New Feature - You can add rows and columns inside of a table
+* New Feature - You can delete rows and columns inside of a table
+* New Feature - Added some more textfields with the shortcodes for faster access.
+* New Feature - There is now an unique css class for each row if you want to design each row separately.
+* Bugfix - Fixed the issue that made the colorpicker not working.
+
 = Version 1.02 =
 * New Feature - You are now able to copy a table
 * New feature - You are now able to add a picture in the table headline/table footer
@@ -47,6 +59,11 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 * The plugin is released
 
 == Upgrade Notice ==
+
+= Version 1.1.1 =
+Alot of more functionality is added for the table content editor. You are now able to move, add or delete rows and columns directly in the table content page. 
+You are now able to change table names and disable the table header. 
+Small Bugfixes
 
 = Version 1.02 =
 Two new features are added. You are now able to copy a table and add pictures to the table headline/footer. 
