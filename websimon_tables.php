@@ -215,8 +215,8 @@ function websimon_tables_install_plugin() {
 * Updates for database and versions of the plugin 
 */
 function websimon_tables_update_function() {
-	$websimon_tables_db_version = '1.1.1';
-	$websimon_tables_version = '1.1.1';
+	$websimon_tables_db_version = '1.1.2';
+	$websimon_tables_version = '1.1.2';
 	
 	$db_ver = get_site_option('websimon_tables_db_version');
 	$plug_ver = get_site_option('websimon_tables_version');
@@ -225,11 +225,11 @@ function websimon_tables_update_function() {
 		add_option('websimon_tables_copy', 1);
 		update_option("websimon_tables_db_version", '1.02');
     }
-	if ($db_ver == '1.02') {
-		update_option("websimon_tables_db_version", '1.1.1');
+	if ($db_ver != $websimon_tables_db_version) {
+		update_option("websimon_tables_db_version", '1.1.2');
     }
 	if ($plug_ver != $websimon_tables_version) {
-        update_option("websimon_tables_version", '1.1.1');
+        update_option("websimon_tables_version", '1.1.2');
     }
 }
 /*
