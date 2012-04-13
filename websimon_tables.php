@@ -3,7 +3,7 @@
 Plugin Name: Websimon Tables
 Plugin URI: http://websimon.se/websimon-tables
 Description: Create and style tables for wordpress posts and pages
-Version: 1.1.2
+Version: 1.3.1
 Author: Simon Rybrand
 Author URI: http://websimon.se
 */
@@ -215,8 +215,8 @@ function websimon_tables_install_plugin() {
 * Updates for database and versions of the plugin 
 */
 function websimon_tables_update_function() {
-	$websimon_tables_db_version = '1.1.2';
-	$websimon_tables_version = '1.1.2';
+	$websimon_tables_db_version = '1.3.1';
+	$websimon_tables_version = '1.3.1';
 	
 	$db_ver = get_site_option('websimon_tables_db_version');
 	$plug_ver = get_site_option('websimon_tables_version');
@@ -226,10 +226,10 @@ function websimon_tables_update_function() {
 		update_option("websimon_tables_db_version", '1.02');
     }
 	if ($db_ver != $websimon_tables_db_version) {
-		update_option("websimon_tables_db_version", '1.1.2');
+		update_option("websimon_tables_db_version", '1.3.1');
     }
 	if ($plug_ver != $websimon_tables_version) {
-        update_option("websimon_tables_version", '1.1.2');
+        update_option("websimon_tables_version", '1.3.1');
     }
 }
 /*
