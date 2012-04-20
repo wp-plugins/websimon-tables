@@ -34,6 +34,9 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 
 == Changelog ==
 
+= Version 1.3.2 =
+* Small bugfix to fix that some users websites gets incorrect link to the dynamic stylesheet. 
+
 = Version 1.3.1 =
 * Same as 1.1.2 and 1.1.1 (which was a major update) but this update had to be done so that the update notification is sent out to all users.
 
@@ -65,6 +68,8 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 * The plugin is released
 
 == Upgrade Notice ==
+= Version 1.3.2 =
+* Upgrade to this version if your table designs doesn´t get displayed correctly
 
 = Version 1.3.1 =
 * Same as 1.1.2 and 1.1.1 (which was a major update) but this update had to be done so that the update notification is sent out to all users.
