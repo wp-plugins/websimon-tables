@@ -4,7 +4,7 @@ Donate link: http://websimon.se/websimon-tables#donate
 Tags: table, tables, css, design, html table, custom tables
 Requires at least: 2.0.3
 Tested up to: 3.3.1
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 A plugin to create, manage and design tables within wordpress. 
 Choose between readymade skins or make your own custom table CSS design.
