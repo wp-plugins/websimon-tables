@@ -18,8 +18,18 @@ foreach ($result as $results) {
 	$design = $results->design;
 }
 
+
+//define variables
+$footer_on = '';
+$table_h_borders_on = '';
+$table_v_borders_on = '';
+$shadow_effect_on = '';
+$hover_effect_on = '';
+$header_on = '';
+
 //Handle the information from the database
 $design_elements = explode(';', $design);
+
 $text_align = $design_elements[0];
 if ($design_elements[1] == 'on') { $footer_on = 'checked'; };
 if ($design_elements[2] == 'on') { $table_h_borders_on = 'checked'; };
@@ -304,25 +314,29 @@ echo '
 									while ($i <= $numcol){ 
 										
 										echo 'Col ' . $i . ':<select name="column' . $i . '" class="admin-select-style">
-											<option '; if ($colwidths[$i-1] == '10%') { echo 'selected="selected"'; } echo ' value="10%">10%</option>
-											<option '; if ($colwidths[$i-1] == '15%') { echo 'selected="selected"'; } echo ' value="15%">15%</option>
-											<option '; if ($colwidths[$i-1] == '20%') { echo 'selected="selected"'; } echo ' value="20%">20%</option>
-											<option '; if ($colwidths[$i-1] == '25%') { echo 'selected="selected"'; } echo ' value="25%">25%</option>
-											<option '; if ($colwidths[$i-1] == '30%') { echo 'selected="selected"'; } echo ' value="30%">30%</option>
-											<option '; if ($colwidths[$i-1] == '35%') { echo 'selected="selected"'; } echo ' value="35%">35%</option>
-											<option '; if ($colwidths[$i-1] == '40%') { echo 'selected="selected"'; } echo ' value="40%">40%</option>
-											<option '; if ($colwidths[$i-1] == '45%') { echo 'selected="selected"'; } echo ' value="45%">45%</option>
-											<option '; if ($colwidths[$i-1] == '50%') { echo 'selected="selected"'; } echo ' value="50%">50%</option>
-											<option '; if ($colwidths[$i-1] == '55%') { echo 'selected="selected"'; } echo ' value="55%">55%</option>
-											<option '; if ($colwidths[$i-1] == '60%') { echo 'selected="selected"'; } echo ' value="60%">60%</option>
-											<option '; if ($colwidths[$i-1] == '65%') { echo 'selected="selected"'; } echo ' value="65%">65%</option>
-											<option '; if ($colwidths[$i-1] == '70%') { echo 'selected="selected"'; } echo ' value="70%">70%</option>
-											<option '; if ($colwidths[$i-1] == '75%') { echo 'selected="selected"'; } echo ' value="75%">75%</option>
-											<option '; if ($colwidths[$i-1] == '80%') { echo 'selected="selected"'; } echo ' value="80%">80%</option>
-											<option '; if ($colwidths[$i-1] == '85%') { echo 'selected="selected"'; } echo ' value="85%">85%</option>
-											<option '; if ($colwidths[$i-1] == '90%') { echo 'selected="selected"'; } echo ' value="90%">90%</option>
-											<option '; if ($colwidths[$i-1] == '95%') { echo 'selected="selected"'; } echo ' value="95%">95%</option>
-											<option '; if ($colwidths[$i-1] == '100%') { echo 'selected="selected"'; } echo ' value="100%">100%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '2%') { echo 'selected="selected"'; } echo ' value="2%">2%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '5%') { echo 'selected="selected"'; } echo ' value="5%">5%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '7%') { echo 'selected="selected"'; } echo ' value="7%">7%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '9%') { echo 'selected="selected"'; } echo ' value="9%">9%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '10%') { echo 'selected="selected"'; } echo ' value="10%">10%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '15%') { echo 'selected="selected"'; } echo ' value="15%">15%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '20%') { echo 'selected="selected"'; } echo ' value="20%">20%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '25%') { echo 'selected="selected"'; } echo ' value="25%">25%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '30%') { echo 'selected="selected"'; } echo ' value="30%">30%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '35%') { echo 'selected="selected"'; } echo ' value="35%">35%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '40%') { echo 'selected="selected"'; } echo ' value="40%">40%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '45%') { echo 'selected="selected"'; } echo ' value="45%">45%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '50%') { echo 'selected="selected"'; } echo ' value="50%">50%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '55%') { echo 'selected="selected"'; } echo ' value="55%">55%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '60%') { echo 'selected="selected"'; } echo ' value="60%">60%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '65%') { echo 'selected="selected"'; } echo ' value="65%">65%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '70%') { echo 'selected="selected"'; } echo ' value="70%">70%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '75%') { echo 'selected="selected"'; } echo ' value="75%">75%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '80%') { echo 'selected="selected"'; } echo ' value="80%">80%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '85%') { echo 'selected="selected"'; } echo ' value="85%">85%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '90%') { echo 'selected="selected"'; } echo ' value="90%">90%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '95%') { echo 'selected="selected"'; } echo ' value="95%">95%</option>
+											<option '; if (isset($colwidths[$i-1]) && $colwidths[$i-1] == '100%') { echo 'selected="selected"'; } echo ' value="100%">100%</option>
 										</select>';
 										$i++;
 									}

@@ -3,15 +3,15 @@ Contributors: Websimon
 Donate link: http://websimon.se/websimon-tables#donate
 Tags: table, tables, css, design, html table, custom tables
 Requires at least: 2.0.3
-Tested up to: 3.3.1
-Stable tag: 1.3.2
+Tested up to: 3.5
+Stable tag: 1.3.3
 
 A plugin to create, manage and design tables within wordpress. 
 Choose between readymade skins or make your own custom table CSS design.
 
 == Description ==
 Websimon Tables lets you create and design tables within your wordpress admin panel. No knowledge about php, HTML or CSS is needed. You can create
-as many tables as you wish and create a unique design for each tables. You include the tables in your post or pages using a short and simple shortcode. 
+as many tables as you wish and create a unique design for each table. You include the tables in your post or pages using a short and simple shortcode. 
 The tables can contain images or any type of html code so you can extend them for your own needs. 
 
 If you want to see more information, demos or screenshots of this plugin please visit http://websimon.se/websimon-tables. 
@@ -33,6 +33,14 @@ http://websimon.se/websimon-tables#askaquestion
 If you want to see screenshots of this plugin please visit http://websimon.se/websimon-tables
 
 == Changelog ==
+
+= Version 1.3.3 =
+* New Feature - Added a beta feature to import .csv files to a table
+* New Feature - Added a beta feature to export tables to .csv files
+* New Feature - Added support for shortcodes inside of tables.
+* New Feature - More options for choosing column width.
+* Structure change - The dynamic css is now loaded together with the table to improve page loading time.
+* Bug fix - Fixed the issue that made the column widths not working when you removed the table header.
 
 = Version 1.3.2 =
 * Small bugfix to fix that some users websites gets incorrect link to the dynamic stylesheet. 
@@ -68,6 +76,12 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 * The plugin is released
 
 == Upgrade Notice ==
+
+= Version 1.3.3 =
+* Some new features where the largest update is the new BETA feature to import/export tables with .csv. 
+* Support for shortchodes inside of the tables where added
+* Some structure changes to make the loading time for table css faster.
+
 = Version 1.3.2 =
 * Upgrade to this version if your table designs doesn´t get displayed correctly
 

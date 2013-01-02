@@ -14,12 +14,15 @@ foreach ($result as $results) {
 $result = $wpdb->get_results("SELECT tablename FROM $table_name");
 $jscript = '[';
 $i = 0;
-foreach ($result as $results) {
-	
-	if ($i == 0) {
+foreach ($result as $results) 
+{
+	if ($i == 0) 
+	{
 		$jscript .= '"' . $results->tablename . '"';
 		$i++;
-	} else { 
+	} 
+	else 
+	{ 
 		$jscript .= ', "' . $results->tablename . '"';		
 		$i++;
 	}

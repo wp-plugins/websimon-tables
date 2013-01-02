@@ -58,10 +58,10 @@ echo '
 		$organize_nonce = wp_create_nonce('organize_table');
 	}
 		
-	if ($_GET['column_change'] == '1') {
+	if (isset($_GET['column_change']) && $_GET['column_change'] == '1') {
 		echo '
 		<div id="websimon-tables-message">
-			You have added or deleted a column.<br />Please note that your settings for column widths might need a change in <a href="?page=websimon_tables&action=edit_style&id=' . $this_id . '">Edit table structure and style</a>
+			You table was changed.<br />Please note that your settings for column widths might need a change in <a href="?page=websimon_tables&action=edit_style&id=' . $this_id . '">Edit table structure and style</a> if you edited your columns. 
 		</div>
 		';
 	}
@@ -133,7 +133,9 @@ echo '<tr class="table-header"><td class="table-row-explan">Table Headlines<br /
 	</a></td>';
 	while ($col_counter <= $numcol) { 
 		echo '<td>
-			<textarea rows="1" style="height: 30px;width:100%;" name="head' . $col_counter . '" />' . stripslashes($thead_content[$col_counter-1]) . '</textarea>
+			<textarea rows="1" style="height: 30px;width:100%;" name="head' . $col_counter . '" />';
+			if (isset($thead_content[$col_counter-1])) { echo stripslashes($thead_content[$col_counter-1]); }
+			echo '</textarea>
 		</td>';	
 		$col_counter++;
 	}
@@ -178,10 +180,12 @@ while ($row_counter <= $numrow) {
 	echo '
 	</td>';
 	unset($cell);
-	$cell = explode('[-%cell%-]' , $tbody_content[$row_counter-1]); //explode each cell
+	if (isset($tbody_content[$row_counter-1])) { $cell = explode('[-%cell%-]' , $tbody_content[$row_counter-1]); } //explode each cell
 
 	while ($col_counter <= $numcol) {
-		echo '<td><textarea style="width:100%;min-height:120px;" name="cell' . $cell_counter . '" class="cell-content">' . stripslashes($cell[$col_counter-1]) . '</textarea></td>';
+		echo '<td><textarea style="width:100%;min-height:120px;" name="cell' . $cell_counter . '" class="cell-content">';
+		if (isset($cell[$col_counter-1])) { echo stripslashes($cell[$col_counter-1]); }
+		echo '</textarea></td>';
 		$col_counter++;
 		$cell_counter++;
 		

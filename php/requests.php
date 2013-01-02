@@ -23,14 +23,20 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_all_tables'],'new_table') )
 	Function to round up or down to five.
 	Used to create the inital widths for columns.
 	*/
-	function roundFive($numcol) {
+	function roundFive($numcol) 
+	{
 		$div = floor(100/$numcol);
 		$rest = $div % 5;
-		if ($rest >= 3) {
+		if ($rest >= 3) 
+		{
 			return ($div + (5-$rest));
-		} elseif ($rest < 3) {
+		} 
+		elseif ($rest < 3) 
+		{
 			return ($div - $rest);
-		} else {
+		} 
+		else 
+		{
 			return $div;
 		}
 	}
@@ -38,8 +44,9 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_all_tables'],'new_table') )
 	
 	$startwidths = roundFive($cols);
 	$i = 1;
-	
-	while ($i < $cols) {
+	$colwidths = '';
+	while ($i < $cols) 
+	{
 		$colwidths .= $startwidths . '%:';
 		$i++;
 	}
@@ -66,7 +73,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_all_tables'],'new_table') )
 /*
 Delete entire Table
 */
-if ($_GET['action'] == 'delete_table') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete_table') {
 $nonce = $_GET['_wpnonce'];
 if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table' ) )
 {
@@ -85,7 +92,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table' ) )
 /*
 Delete Table Content
 */
-if ($_GET['action'] == 'delete_table_content') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete_table_content') {
 $nonce = $_GET['_wpnonce'];
 if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table-content' ) )
 {
@@ -135,7 +142,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'delete-table-content' ) )
 /*
 Copy entire Table
 */
-if ($_GET['action'] == 'duplicate_table') {
+if (isset($_GET['action']) && $_GET['action'] == 'duplicate_table') {
 $nonce = $_GET['_wpnonce'];
 if ( empty($_GET) || !wp_verify_nonce($nonce, 'duplicate-table' ) )
 {
@@ -205,6 +212,274 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_rename_table'],'rename_tabl
 	
 }
 }
+
+/*
+* Import table via .csv
+*/
+if (isset($_POST['import_table_hidden'])) { 
+	
+if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_import_table'],'import_table') )
+{
+   print 'Sorry, you cannot process data this way.';
+   exit;
+}
+	else
+{
+	global $wpdb;
+	$table_name = $wpdb->prefix . "websimon_tables";
+	$heads = false;
+	$headsdone = false;
+	
+	$csvurl = $_POST['import_table_file'];
+	if (isset($_POST['import_table_first_row_head']) && $_POST['import_table_first_row_head'] == 'on' )
+	{
+		$heads = true;
+	}
+	
+	$content = '';
+	$headlines = '';
+	$nr_of_rows = 0;
+	$nr_of_cols = 1;
+	$col = 1;
+	if ($handle = @fopen($csvurl, "r") !== FALSE)
+	{
+		$handle = fopen($csvurl, "r");	
+		
+		/*
+		* read csv file
+		* max rows is set to 100 000
+		*/
+		$i = 0; 
+		while (($data = fgetcsv($handle, 100000, ",")) !== FALSE) 
+		{
+			$nr_of_rows++;
+			$num = count($data);
+
+			if ($heads && !$headsdone)
+			{
+				for ($c=0; $c < $num; $c++) 
+				{
+					$dataArray = explode(';', utf8_encode( $data[$c]) );
+					$headcount = 0;
+					foreach ($dataArray as $cell)
+					{
+						if ($headcount == 0)
+						{
+							$headlines .= $cell;
+						}
+						else
+						{
+							$headlines .= '[-|-]' . $cell;
+						}
+						$headcount++;
+					}
+				}
+				$headsdone = true;
+			}
+			else
+			{
+				for ($c=0; $c < $num; $c++) 
+				{
+					$dataArray = explode(';', utf8_encode( $data[$c]) );
+					
+					if ( $nr_of_rows == 1 || ($headsdone && $nr_of_rows == 2) )
+					{
+						$cellcount = 0;
+						foreach ($dataArray as $cell)
+						{
+							if ($cellcount == 0)
+							{
+								$content .= $cell;
+							}
+							else
+							{
+								$content .= '[-%cell%-]' . $cell;
+							}
+							$cellcount++;
+						}
+					}
+					else
+					{
+						$content .= '[-%row%-]';
+						$cellcount = 0;
+						foreach ($dataArray as $cell)
+						{
+							if ($cellcount == 0)
+							{
+								$content .= $cell;
+							}
+							else
+							{
+								$content .= '[-%cell%-]' . $cell;
+							}
+							$cellcount++;
+						}
+					}
+					
+					//keep track of max columns
+					if ( count($dataArray) > $nr_of_cols) 
+					{
+						$nr_of_cols = count($dataArray);
+					}
+				}
+			}
+		}
+		fclose($handle);
+		
+		
+		/* 
+		* prepare table
+		*/
+		$name = $_POST['import_table_name'];
+		if ($heads)
+		{
+			$rows = $nr_of_rows-1;
+			$cols = $nr_of_cols-1;
+		}
+		else 
+		{
+			$rows = $nr_of_rows;
+			$cols = $nr_of_cols;
+		}
+		
+		/*
+		Function to round up or down to five.
+		Used to create the inital widths for columns.
+		*/
+		function importRoundFive($numcol) 
+		{
+			$div = floor(100/$numcol);
+			$rest = $div % 5;
+			if ($rest >= 3) {
+				return ($div + (5-$rest));
+			} elseif ($rest < 3) {
+				return ($div - $rest);
+			} else {
+				return $div;
+			}
+		}
+		
+		$startwidths = importRoundFive($cols);
+		$r = 1;
+		$colwidths = '';
+		while ($r < $cols) 
+		{
+			$colwidths .= $startwidths . '%:';
+			$r++;
+		}
+		
+		$colwidths .= $startwidths . '%';
+		
+		
+		/*
+		* Save imported table
+		*/
+		$rows_affected = $wpdb->insert( 
+										$table_name, 
+										array( 
+											'tablename' => $name,
+											'rows' => $rows, 
+											'cols' => $cols, 
+											'style' => 'minimalistwhite', 
+											'design' => 'center;on;on;;on;;1.5;1.0;' . $colwidths . ';;;1.2;2.0;center;top;',
+											'advanced' => ';;;FFFFFF;EEEEEE;FFFFFF;EEEEEE;FFFFFF;FCFCFC;000000;000000;000000;FFFFFF;CCCCCC', 
+											'headlines' => $headlines,
+											'content' => $content
+											)); 
+		
+		$get_id = $wpdb->get_results("SELECT id FROM $table_name WHERE tablename='$name'");	
+		
+		foreach ($get_id as $id) {
+			$shortcode = '[ws_table id="' . $id->id . '"]';
+		}
+		$wpdb->update( $table_name, array( 'shortcode' => $shortcode ), array( 'tablename' => $name ) );
+		
+		header('Location: ?page=websimon_tables');
+		exit;
+	}
+	elseif ($handle = @fopen($csvurl, "r") === FALSE) //could not find file
+	{
+		$errormessage = '0';		
+		header('Location: ?page=websimon_tables&action=ws_import_table&error=' . $errormessage . '');
+		exit;
+	}
+
+}
+}
+
+/*
+Export table to .csv file
+*/
+
+if (isset($_GET['action']) && $_GET['action'] == 'export_table_content') {
+	$nonce = $_GET['_wpnonce'];
+	if ( empty($_GET) || !wp_verify_nonce($nonce, 'export-table-content' ) )
+	{
+	   print 'Sorry, you cannot process data this way.';
+	   exit;	
+	} 
+	else 
+	{
+		$output = '';
+		$exportArray = array();
+		$id = $_GET['export_id'];
+		$name = $_GET['exports_name'];
+		global $wpdb;
+		$table_name = $wpdb->prefix . "websimon_tables";
+		$results = $wpdb->get_results("SELECT headlines, content FROM $table_name WHERE id='$id'");
+		
+		foreach ($results as $result)
+		{
+			
+			//add headlines
+			$headArray = explode('[-|-]', $result->headlines);
+			$count = 0; 
+			foreach ($headArray as $elem)
+			{
+				if ($count == 0)
+				{
+					$output .= utf8_decode($elem);
+				}
+				else
+				{
+					$output .= ';' . utf8_decode($elem);
+				}
+				$count++;
+			}
+			$output .= "\r\n";
+			
+			//add content
+			$bodyArray = explode('[-%row%-]' , $result->content);
+			foreach ($bodyArray as $elem)
+			{
+				$count = 0; 
+				$rowArray = explode('[-%cell%-]', $elem);
+				foreach ($rowArray as $cell)
+				{
+					if ($count == 0)
+					{
+						$output .= utf8_decode($cell);
+					}
+					else
+					{
+						$output .= ';' . utf8_decode($cell);
+					}
+					$count++;
+				}
+			$output .= "\r\n";
+			}
+		}
+		
+		$sitename = get_bloginfo( 'url' );
+		$filename = 'exports-table-' . $name . '.csv';
+		
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Type: text/csv; charset=' . get_option( 'blog_charset' ), true );
+		echo $output;
+		exit;
+	}
+}
 /*
 Edit table content
 Saves the table content
@@ -217,7 +492,7 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_table_content'],'table-cont
    exit;
 }	
 	else
-{	
+{	 
 
 	$content = ''; //content string to be saved to the database
 	$headlines = ''; //headline string to be saved to the database
@@ -282,13 +557,20 @@ Organize table content
 - add or delete rows
 - Move rows or columns
 */
-if ($_GET['action'] == 'ws_organize_table_content') {
+if (isset($_GET['action']) && $_GET['action'] == 'ws_organize_table_content') {
 $nonce = $_GET['_wpnonce'];
 if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 {
    print 'Sorry, you cannot process data this way.';
    exit;	
 } else {
+	
+	//define
+	$new_heads = '';
+	$new_content = '';
+
+
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . "websimon_tables";
 	$id = $_GET['table_id'];
@@ -323,6 +605,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 						
 			$row_counter++;
 		}
+		$column_message = '&column_change=1';
 		$wpdb->update( $table_name, array( 'rows' => $numrow+1, 'content' => $new_content ), array( 'id' => $id ) );	
 	
 	//insert a row at the top
@@ -355,7 +638,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 			}
 			$i++;
 		}
-
+		$column_message = '&column_change=1';
 		$wpdb->update( $table_name, array( 'rows' => $numrow-1, 'content' => $new_content ), array( 'id' => $id ) );	
 	
 	//Move a row upwards one step
@@ -384,6 +667,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 				$row_counter++;
 			}
 		}
+		$column_message = '&column_change=1';
 		$wpdb->update( $table_name, array( 'content' => $new_content ), array( 'id' => $id ) );		
 	
 	//Move a row one step down
@@ -412,6 +696,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 				$row_counter++;
 			}
 		}
+		$column_message = '&column_change=1';
 		$wpdb->update( $table_name, array( 'content' => $new_content ), array( 'id' => $id ) );		
 	
 	//insert a column to the left
@@ -590,6 +875,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
 			$row_counter++;
 		}
+		$column_message = '&column_change=1';
 		$wpdb->update( $table_name, array( 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
 		
 	//move column one step right
@@ -645,7 +931,7 @@ if ( empty($_GET) || !wp_verify_nonce($nonce, 'organize_table' ) )
 			if ($row_counter < $numrow) { $new_content .= '[-%row%-]'; }
 			$row_counter++;
 		}
-
+		$column_message = '&column_change=1';
 		$wpdb->update( $table_name, array( 'headlines' => $new_heads, 'content' => $new_content ), array( 'id' => $id ) );
 	}
 	header('Location: ?page=websimon_tables&action=edit_table&id=' . $id . $column_message);
@@ -667,25 +953,25 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_basic_settings'],'basic-set
 {
 	global $wpdb;
 	$table_name = $wpdb->prefix . "websimon_tables";
-	$style = $_POST['table_style'];
-	$rows = $_POST['num_rows'];
-	$cols = $_POST['num_cols'];
-	$id = $_POST['edit_hidden_settings_id'];
-	$text_align = $_POST['table_text_align'];
-	$fixed_width = $_POST['fixed_width']; 
-	$cell_padding = $_POST['cell_padding'];
-	$table_footer = $_POST['table_footer'];
-	$table_header = $_POST['table_header'];
-	$table_h_borders = $_POST['table_h_borders'];
-	$table_v_borders = $_POST['table_v_borders'];
-	$shadow_effect = $_POST['shadow_effect'];
-	$hover_effect = $_POST['hover_effect'];
-	$font_size_h = $_POST['font_size_h'];
-	$font_size_b = $_POST['font_size_b'];
-	$line_height_b = $_POST['line_height_b'];
-	$line_height_h = $_POST['line_height_h'];
-	$table_text_align_h = $_POST['table_text_align_h'];
-	$v_text_align = $_POST['v_text_align'];
+	if (isset($_POST['table_style'])) { $style = $_POST['table_style']; } else { $style = ''; }
+	if (isset($_POST['num_rows'])) { $rows = $_POST['num_rows']; } else { $rows = ''; }
+	if (isset($_POST['num_cols'])) { $cols = $_POST['num_cols']; } else { $cols = ''; }
+	if (isset($_POST['edit_hidden_settings_id'])) { $id = $_POST['edit_hidden_settings_id']; } else { $id = ''; }
+	if (isset($_POST['table_text_align'])) { $text_align = $_POST['table_text_align']; } else { $text_align = ''; }
+	if (isset($_POST['fixed_width'])) { $fixed_width = $_POST['fixed_width'];  } else { $fixed_width = ''; }
+	if (isset($_POST['cell_padding'])) { $cell_padding = $_POST['cell_padding']; } else { $cell_padding = ''; }
+	if (isset($_POST['table_footer'])) { $table_footer = $_POST['table_footer']; } else { $table_footer = ''; }
+	if (isset($_POST['table_header'])) { $table_header = $_POST['table_header']; } else { $table_header = ''; }
+	if (isset($_POST['table_h_borders'])) { $table_h_borders = $_POST['table_h_borders']; } else { $table_h_borders = ''; }
+	if (isset($_POST['table_v_borders'])) { $table_v_borders = $_POST['table_v_borders']; } else { $table_v_borders = ''; }
+	if (isset($_POST['shadow_effect'])) { $shadow_effect = $_POST['shadow_effect']; } else { $shadow_effect = ''; }
+	if (isset($_POST['hover_effect'])) { $hover_effect = $_POST['hover_effect']; } else { $hover_effect = ''; }
+	if (isset($_POST['font_size_h'])) { $font_size_h = $_POST['font_size_h']; } else { $font_size_h = ''; }
+	if (isset($_POST['font_size_b'])) { $font_size_b = $_POST['font_size_b']; } else { $font_size_b = ''; }
+	if (isset($_POST['line_height_b'])) { $line_height_b = $_POST['line_height_b']; } else { $line_height_b = ''; }
+	if (isset($_POST['line_height_h'])) { $line_height_h = $_POST['line_height_h']; } else { $line_height_h = ''; }
+	if (isset($_POST['table_text_align_h'])) { $table_text_align_h = $_POST['table_text_align_h']; } else { $table_text_align_h = ''; }
+	if (isset($_POST['v_text_align'])) { $v_text_align = $_POST['v_text_align']; } else { $v_text_align = ''; }
 	
 	
 	//save column widths
@@ -724,22 +1010,22 @@ if ( empty($_POST) || !wp_verify_nonce($_POST['nonce_advanced_settings'],'advanc
 	global $wpdb;
 	$table_name = $wpdb->prefix . "websimon_tables";
 	
-	$id = $_POST['edit_hidden_settings_id'];
-	$fixed_width = $_POST['fixed_width'];
-	$cell_padding = $_POST['cell_padding'];
-	$style = $_POST['custom_settings'];
-	$custom_settings = $_POST['custom_settings'];
-	$start_color_h = $_POST['start_color_h'];
-	$end_color_h = $_POST['end_color_h'];
-	$start_color_f = $_POST['start_color_f'];
-	$end_color_f = $_POST['end_color_f'];
-	$row_color = $_POST['row_color'];
-	$alt_row_color = $_POST['alt_row_color'];
-	$h_font_color = $_POST['h_font_color'];
-	$f_font_color = $_POST['f_font_color'];
-	$c_font_color = $_POST['c_font_color'];
-	$v_border_color = $_POST['v_border_color'];
-	$h_border_color = $_POST['h_border_color'];
+	if (isset($_POST['edit_hidden_settings_id'])) { $id = $_POST['edit_hidden_settings_id']; } else { $id = ''; }
+	if (isset($_POST['fixed_width'])) { $fixed_width = $_POST['fixed_width']; } else { $fixed_width = ''; }
+	if (isset($_POST['cell_padding'])) { $cell_padding = $_POST['cell_padding']; } else { $cell_padding = ''; }
+	if (isset($_POST['custom_settings'])) { $style = $_POST['custom_settings']; } else { $style = ''; }
+	if (isset($_POST['custom_settings'])) { $custom_settings = $_POST['custom_settings']; } else { $custom_settings = ''; }
+	if (isset($_POST['start_color_h'])) { $start_color_h = $_POST['start_color_h']; } else { $start_color_h = ''; }
+	if (isset($_POST['end_color_h'])) { $end_color_h = $_POST['end_color_h']; } else { $end_color_h = ''; }
+	if (isset($_POST['start_color_f'])) { $start_color_f = $_POST['start_color_f']; } else { $start_color_f = ''; }
+	if (isset($_POST['end_color_f'])) { $end_color_f = $_POST['end_color_f']; } else { $end_color_f = ''; }
+	if (isset($_POST['row_color'])) { $row_color = $_POST['row_color']; } else { $row_color = ''; }
+	if (isset($_POST['alt_row_color'])) { $alt_row_color = $_POST['alt_row_color']; } else { $alt_row_color = ''; }
+	if (isset($_POST['h_font_color'])) { $h_font_color = $_POST['h_font_color']; } else { $h_font_color = ''; }
+	if (isset($_POST['f_font_color'])) { $f_font_color = $_POST['f_font_color']; } else { $f_font_color = ''; }
+	if (isset($_POST['c_font_color'])) { $c_font_color = $_POST['c_font_color']; } else { $c_font_color = ''; }
+	if (isset($_POST['v_border_color'])) { $v_border_color = $_POST['v_border_color']; } else { $v_border_color = ''; }
+	if (isset($_POST['h_border_color'])) { $h_border_color = $_POST['h_border_color']; } else { $h_border_color = ''; }
 	
 	//create string to save
 	$advanced = $custom_settings . ';' . $fixed_width . ';' . $cell_padding . ';' . $start_color_h . ';' . $end_color_h . ';' . $start_color_f . ';' . $end_color_f . ';' . $row_color
