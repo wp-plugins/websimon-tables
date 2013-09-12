@@ -3,7 +3,7 @@
 Plugin Name: Websimon Tables
 Plugin URI: http://websimon.se/websimon-tables
 Description: Create and style tables for wordpress posts and pages
-Version: 1.3.3
+Version: 1.3.4
 Author: Simon Rybrand
 Author URI: http://websimon.se
 */
@@ -13,7 +13,6 @@ Actionhooks
 */
 add_action('admin_menu', 'websimon_tables_menu_items'); //menu
 add_action('init', 'websimon_tables_plugin_requests', 9999); //all db requests
-add_action('wp_head', 'websimon_tables_register_scripts'); //on site css
 add_action('admin_head', 'websimon_tables_admin_register_head'); //admin css
 add_action('plugins_loaded', 'websimon_tables_update_function'); //update
 /*
@@ -100,18 +99,6 @@ function websimon_tables_admin_register_head()
 }
 
 /*
-*	Adds the link to dynamic css in head
-*/
-function websimon_tables_register_scripts () { 
-	/*
-	Deprecated in version 1.3.3 since this feature slowed down page loading time
-	If update is received well this will be removed in next version	
-	$plugin_url = get_option('siteurl') . '/wp-content/plugins/' . plugin_basename(dirname(__FILE__));
-	echo '<link type="text/css" rel="stylesheet" href="' . $plugin_url . '/css/table_skins.php" />' . "\n";
-	*/
-}
-
-/*
 *	Installs the table wp_websimon_tables 
 */
 function websimon_tables_install_plugin() 
@@ -128,10 +115,10 @@ function websimon_tables_install_plugin()
 	  rows VARCHAR(500) DEFAULT '' NOT NULL,
 	  cols VARCHAR(500) DEFAULT '' NOT NULL,
 	  style VARCHAR(500) DEFAULT '' NOT NULL,
-	  design TEXT(5000) DEFAULT '' NOT NULL,
-	  advanced TEXT(5000) DEFAULT '' NOT NULL,
-	  headlines TEXT(5000) DEFAULT '' NOT NULL,
-	  content TEXT(100000) DEFAULT '' NOT NULL,
+	  design TEXT(5000),
+	  advanced TEXT(5000),
+	  headlines TEXT(5000),
+	  content TEXT(100000),
 	  UNIQUE KEY id (id)
 	) ENGINE=MyISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1 ;";
 		
@@ -147,8 +134,8 @@ function websimon_tables_install_plugin()
 */
 function websimon_tables_update_function() 
 {
-	$websimon_tables_db_version = '1.3.3';
-	$websimon_tables_version = '1.3.3';
+	$websimon_tables_db_version = '1.3.4';
+	$websimon_tables_version = '1.3.4';
 	
 	$db_ver = get_site_option('websimon_tables_db_version');
 	$plug_ver = get_site_option('websimon_tables_version');
@@ -160,11 +147,11 @@ function websimon_tables_update_function()
     }
 	if ($db_ver != $websimon_tables_db_version) 
 	{
-		update_option("websimon_tables_db_version", '1.3.3');
+		update_option("websimon_tables_db_version", '1.3.4');
     }
 	if ($plug_ver != $websimon_tables_version) 
 	{
-        update_option("websimon_tables_version", '1.3.3');
+        update_option("websimon_tables_version", '1.3.4');
     }
 }
 /*

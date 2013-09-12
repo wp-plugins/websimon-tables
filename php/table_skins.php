@@ -30,8 +30,9 @@ $v_text_align = $design_elements[14];
 $css = ''; //return string
 
 /*
-Custom style
+*	Custom style
 */
+
 if ($style == 'custom') {
 
 $startcol = $advanced[3];
@@ -64,18 +65,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #' . $h_font_color . ';
-	background: -moz-linear-gradient(center top , #' . $startcol . ', #' . $endcol . ') repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#' . $startcol . '", endColorstr="#' . $endcol . '");
-    background: -webkit-gradient(linear, left top, left bottom, from(#' . $startcol . '), to(#' . $endcol . '));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #' . $h_border_color . ';'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #' . $v_border_color . ';'; } $css .= '
+color: #' . $h_font_color . ';
+background: #' . $startcol . ';
+background: -moz-linear-gradient(top,  #' . $startcol . ' 0%, #' . $endcol . ' 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#' . $startcol . '), color-stop(100%,#' . $endcol . ')); 
+background: -webkit-linear-gradient(top,  #' . $startcol . ' 0%,#' . $endcol . ' 100%);
+background: -o-linear-gradient(top,  #' . $startcol . ' 0%,#' . $endcol . ' 100%);
+background: -ms-linear-gradient(top,  #' . $startcol . ' 0%,#' . $endcol . ' 100%);
+background: linear-gradient(to bottom,  #' . $startcol . ' 0%,#' . $endcol . ' 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#' . $startcol . '", endColorstr="#' . $endcol . '",GradientType=0 );
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #' . $h_border_color . ';'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #' . $v_border_color . ';'; } $css .= '
 }
 
 table#' . $id . ' thead tr th#' . $id . '.start {
@@ -119,56 +125,60 @@ table#' . $id . ' tfoot tr {
 }
 
 table#' . $id . ' tfoot tr td {
-	color: #' . $f_font_color . ';
-	background: -moz-linear-gradient(center top , #' . $startcolf . ', #' . $endcolf . ') repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#' . $startcolf . '", endColorstr="#' . $endcolf . '");
-    background: -webkit-gradient(linear, left top, left bottom, from(#' . $startcolf . '), to(#' . $endcolf . '));
-	padding: 4px;
-	border-width: 0px;
-	font-size: ' . $font_size_b . 'em;
-	border-top: medium none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #' . $v_border_color . ';'; } $css .= '
+color: #' . $f_font_color . ';
+background: #' . $startcolf . ';
+background: -moz-linear-gradient(top,  #' . $startcolf . ' 0%, #' . $endcolf . ' 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#' . $startcol . '), color-stop(100%,#' . $endcolf . ')); 
+background: -webkit-linear-gradient(top,  #' . $startcolf . ' 0%,#' . $endcolf . ' 100%);
+background: -o-linear-gradient(top,  #' . $startcolf . ' 0%,#' . $endcolf . ' 100%);
+background: -ms-linear-gradient(top,  #' . $startcolf . ' 0%,#' . $endcolf . ' 100%);
+background: linear-gradient(to bottom,  #' . $startcolf . ' 0%,#' . $endcolf . ' 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#' . $startcolf . '", endColorstr="#' . $endcolf . '",GradientType=0 );
+padding: 4px;
+border-width: 0px;
+font-size: ' . $font_size_b . 'em;
+border-top: medium none;
+text-align: ' . $table_text_align_h . ';';
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #' . $v_border_color . ';'; } $css .= '
 }
 ';
 }
 
 
 /*
-Minimalist White skin
+*	Minimalist White skin
 */
 if ($style == 'minimalistwhite') {
 $css .= '
 
 table#' . $id . ' {
-    border-collapse: collapse;	
-	border-width: 0px;
-	border-style: outset;
-    margin: 20px 0;
-	line-height: 2.0em;
-    text-align: ' . $text_align . ';
-    vertical-align: top;';
-	if ($fixed_width != '' ) { $css .= 'width: ' . $fixed_width . 'px;'; } else { $css .= 'width: 100%;';} 
-	if ($h_borders != '' ) { $css .= 'border-top: 1px solid #EEEEEE;'; }
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #EEEEEE;'; }
-	if ($v_borders != '' ) { $css .= 'border-right: 1px solid #EEEEEE;'; }
-	if ($shadow_effect != '' ) { $css .= 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);'; } $css .= '
-	
+border-collapse: collapse;	
+border-width: 0px;
+border-style: outset;
+margin: 20px 0;
+line-height: 2.0em;
+text-align: ' . $text_align . ';
+vertical-align: top;';
+if ($fixed_width != '' ) { $css .= 'width: ' . $fixed_width . 'px;'; } else { $css .= 'width: 100%;';} 
+if ($h_borders != '' ) { $css .= 'border-top: 1px solid #EEEEEE;'; }
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #EEEEEE;'; }
+if ($v_borders != '' ) { $css .= 'border-right: 1px solid #EEEEEE;'; }
+if ($shadow_effect != '' ) { $css .= 'box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);'; } $css .= '
 }
 table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #333333;
-	background: none repeat scroll 0 0 #FFFFFF;
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #EEEEEE;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #EEEEEE;'; } $css .= '
+color: #333333;
+background: none repeat scroll 0 0 #FFFFFF;
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #EEEEEE;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #EEEEEE;'; } $css .= '
 }
 ';
 
@@ -229,7 +239,7 @@ table#' . $id . ' tfoot tr td {
 }
 
 /*
-Black and white skin
+*	Black and white skin
 */
 
 if ($style == 'blackwhite') {
@@ -254,18 +264,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #EEEEEE;
-	background: -moz-linear-gradient(center top , #1D1D1D, #303030) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1D1D1D", endColorstr="#303030");
-    background: -webkit-gradient(linear, left top, left bottom, from(#1D1D1D), to(#303030));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    text-align: ' . $table_text_align_h . ';
-    padding: 4px;
-    text-transform: none;';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #AFAFAF;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #AFAFAF;'; } $css .= '
+color: #EEEEEE;
+background: #1D1D1D;
+background: -moz-linear-gradient(top,  #1D1D1D 0%, #303030 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1D1D1D), color-stop(100%,#303030)); 
+background: -webkit-linear-gradient(top,  #1D1D1D 0%,#303030 100%);
+background: -o-linear-gradient(top,  #1D1D1D 0%,#303030 100%);
+background: -ms-linear-gradient(top,  #1D1D1D 0%,#303030 100%);
+background: linear-gradient(to bottom,  #1D1D1D 0%,#303030 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#1D1D1D", endColorstr="#303030",GradientType=0 );
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+text-align: ' . $table_text_align_h . ';
+padding: 4px;
+text-transform: none;';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #AFAFAF;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #AFAFAF;'; } $css .= '
 }';
 
 $css .= '
@@ -313,16 +328,21 @@ table#' . $id . ' tfoot tr {
 }
 
 table#' . $id . ' tfoot tr td {
-	background: -moz-linear-gradient(center top , #1D1D1D, #303030) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1D1D1D", endColorstr="#303030");
-    background: -webkit-gradient(linear, left top, left bottom, from(#1D1D1D), to(#303030));
-	padding: 4px;
-	border-width: 0px;
-	font-size: ' . $font_size_b . 'em;
-	color: #CCCCCC;
-	border-top: medium none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #AFAFAF;'; } $css .= '
+background: #1D1D1D;
+background: -moz-linear-gradient(top,  #1D1D1D 0%, #303030 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1D1D1D), color-stop(100%,#303030)); 
+background: -webkit-linear-gradient(top,  #1D1D1D 0%,#303030 100%);
+background: -o-linear-gradient(top,  #1D1D1D 0%,#303030 100%);
+background: -ms-linear-gradient(top,  #1D1D1D 0%,#303030 100%);
+background: linear-gradient(to bottom,  #1D1D1D 0%,#303030 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#1D1D1D", endColorstr="#303030",GradientType=0 );
+padding: 4px;
+border-width: 0px;
+font-size: ' . $font_size_b . 'em;
+color: #CCCCCC;
+border-top: medium none;
+text-align: ' . $table_text_align_h . ';';
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #AFAFAF;'; } $css .= '
 }
 ';
 }
@@ -536,18 +556,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #EEF0F3;
-	background: -moz-linear-gradient(center top , #24476B, #506C89) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#24476B", endColorstr="#506C89");
-    background: -webkit-gradient(linear, left top, left bottom, from(#24476B), to(#506C89));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #24476B;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #24476B;'; } $css .= '
+color: #EEF0F3;
+background: #24476B;
+background: -moz-linear-gradient(top,  #24476B 0%, #506C89 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#24476B), color-stop(100%,#506C89)); 
+background: -webkit-linear-gradient(top,  #24476B 0%,#506C89 100%);
+background: -o-linear-gradient(top,  #24476B 0%,#506C89 100%);
+background: -ms-linear-gradient(top,  #24476B 0%,#506C89 100%);
+background: linear-gradient(to bottom,  #24476B 0%,#506C89 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#24476B", endColorstr="#506C89",GradientType=0 );
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #24476B;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #24476B;'; } $css .= '
 }
 
 table#' . $id . ' thead tr th#' . $id . '.start {
@@ -593,22 +618,27 @@ table#' . $id . ' tfoot tr {
 }
 
 table#' . $id . ' tfoot tr td {
-    color: #EEF0F3;
-	background: -moz-linear-gradient(center top , #506C89, #24476B) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#506C89", endColorstr="#24476B");
-    background: -webkit-gradient(linear, left top, left bottom, from(#506C89), to(#24476B));
-	padding: 4px;
-	font-size: ' . $font_size_b . 'em;
-	border-width: 0px;
-	border-top: medium none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #24476B;'; } $css .= '
+color: #EEF0F3;
+background: #24476B;
+background: -moz-linear-gradient(top,  #24476B 0%, #506C89 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#24476B), color-stop(100%,#506C89)); 
+background: -webkit-linear-gradient(top,  #24476B 0%,#506C89 100%);
+background: -o-linear-gradient(top,  #24476B 0%,#506C89 100%);
+background: -ms-linear-gradient(top,  #24476B 0%,#506C89 100%);
+background: linear-gradient(to bottom,  #24476B 0%,#506C89 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#24476B", endColorstr="#506C89",GradientType=0 );
+padding: 4px;
+font-size: ' . $font_size_b . 'em;
+border-width: 0px;
+border-top: medium none;
+text-align: ' . $table_text_align_h . ';';
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #24476B;'; } $css .= '
 }
 ';
 }
 
 /*
-Lightred skin
+*	Lightred skin
 */
 if ($style == 'lightred') {
 $css .= '
@@ -631,18 +661,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #333333;
-	background: -moz-linear-gradient(center top , #FFCCCC, #FFB2B2) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#FFCCCC", endColorstr="#FFB2B2");
-    background: -webkit-gradient(linear, left top, left bottom, from(#FFCCCC), to(#FFB2B2));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #FFE6E6;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #FFE6E6;'; } $css .= '
+color: #333333;
+background: #FFCCCC;
+background: -moz-linear-gradient(top,  #FFCCCC 0%, #FFB2B2 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFCCCC), color-stop(100%,#FFB2B2)); 
+background: -webkit-linear-gradient(top,  #FFCCCC 0%,#FFB2B2 100%);
+background: -o-linear-gradient(top,  #FFCCCC 0%,#FFB2B2 100%);
+background: -ms-linear-gradient(top,  #FFCCCC 0%,#FFB2B2 100%);
+background: linear-gradient(to bottom,  #FFCCCC 0%,#FFB2B2 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#FFCCCC", endColorstr="#FFB2B2",GradientType=0 );
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #FFE6E6;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #FFE6E6;'; } $css .= '
 }
 
 table#' . $id . ' thead tr th#' . $id . '.start {
@@ -697,7 +732,7 @@ table#' . $id . ' tfoot tr td {
 }
 
 /*
-Darkred skin
+*	Darkred skin
 */
 if ($style == 'darkred') {
 $css .= '
@@ -720,18 +755,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #EEEEEE;
-	background: -moz-linear-gradient(center top , #660000, #8F0000) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#660000", endColorstr="#8F0000");
-    background: -webkit-gradient(linear, left top, left bottom, from(#660000), to(#8F0000));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #CCCCCC;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
+color: #EEEEEE;
+background: #660000;
+background: -moz-linear-gradient(top,  #660000 0%, #8F0000 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#660000), color-stop(100%,#8F0000)); 
+background: -webkit-linear-gradient(top,  #660000 0%,#8F0000 100%);
+background: -o-linear-gradient(top,  #660000 0%,#8F0000 100%);
+background: -ms-linear-gradient(top,  #660000 0%,#8F0000 100%);
+background: linear-gradient(to bottom,  #660000 0%,#8F0000 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#660000", endColorstr="#8F0000",GradientType=0 );
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #CCCCCC;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
 }
 
 table#' . $id . ' thead tr th#' . $id . '.start {
@@ -774,16 +814,21 @@ table#' . $id . ' tfoot tr {
 }
 
 table#' . $id . ' tfoot tr td {
-	color: #EEEEEE;
-	background: -moz-linear-gradient(center top , #660000, #8F0000) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#660000", endColorstr="#8F0000");
-    background: -webkit-gradient(linear, left top, left bottom, from(#660000), to(#8F0000));
-	padding: 4px;
-	border-width: 0px;
-	font-size: ' . $font_size_b . 'em;
-	border-top: medium none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
+color: #EEEEEE;	
+background: #660000;
+background: -moz-linear-gradient(top,  #660000 0%, #8F0000 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#660000), color-stop(100%,#8F0000)); 
+background: -webkit-linear-gradient(top,  #660000 0%,#8F0000 100%);
+background: -o-linear-gradient(top,  #660000 0%,#8F0000 100%);
+background: -ms-linear-gradient(top,  #660000 0%,#8F0000 100%);
+background: linear-gradient(to bottom,  #660000 0%,#8F0000 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#660000", endColorstr="#8F0000",GradientType=0 );
+padding: 4px;
+border-width: 0px;
+font-size: ' . $font_size_b . 'em;
+border-top: medium none;
+text-align: ' . $table_text_align_h . ';';
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
 }
 ';
 }
@@ -813,18 +858,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #EEEEEE;
-	background: -moz-linear-gradient(center top , #472400, #5C2E00) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#472400", endColorstr="#5C2E00");
-    background: -webkit-gradient(linear, left top, left bottom, from(#472400), to(#5C2E00));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #CCCCCC;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
+color: #EEEEEE;
+background: #472400;
+background: -moz-linear-gradient(top,  #472400 0%, #5C2E00 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#472400), color-stop(100%,#5C2E00)); 
+background: -webkit-linear-gradient(top,  #472400 0%,#5C2E00 100%);
+background: -o-linear-gradient(top,  #472400 0%,#5C2E00 100%);
+background: -ms-linear-gradient(top,  #472400 0%,#5C2E00 100%);
+background: linear-gradient(to bottom,  #472400 0%,#5C2E00 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#472400", endColorstr="#5C2E00",GradientType=0 );
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #CCCCCC;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
 }
 
 table#' . $id . ' thead tr th#' . $id . '.start {
@@ -867,16 +917,21 @@ table#' . $id . ' tfoot tr {
 }
 
 table#' . $id . ' tfoot tr td {
-	color: #EEEEEE;
-	background: -moz-linear-gradient(center top , #472400, #5C2E00) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#472400", endColorstr="#5C2E00");
-    background: -webkit-gradient(linear, left top, left bottom, from(#472400), to(#5C2E00));
-	padding: 4px;
-	font-size: ' . $font_size_b . 'em;
-	border-width: 0px;
-	border-top: medium none;
-    text-align: ' . $text_align . ';';
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
+color: #EEEEEE;
+background: #472400;
+background: -moz-linear-gradient(top,  #472400 0%, #5C2E00 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#472400), color-stop(100%,#5C2E00)); 
+background: -webkit-linear-gradient(top,  #472400 0%,#5C2E00 100%);
+background: -o-linear-gradient(top,  #472400 0%,#5C2E00 100%);
+background: -ms-linear-gradient(top,  #472400 0%,#5C2E00 100%);
+background: linear-gradient(to bottom,  #472400 0%,#5C2E00 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#472400", endColorstr="#5C2E00",GradientType=0 );
+padding: 4px;
+font-size: ' . $font_size_b . 'em;
+border-width: 0px;
+border-top: medium none;
+text-align: ' . $text_align . ';';
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #CCCCCC;'; } $css .= '
 }
 ';
 }
@@ -906,18 +961,23 @@ table#' . $id . ' thead tr {
 
 }
 table#' . $id . ' thead tr th.' . $id . ' {
-    color: #EEF0F3;
-	background: -moz-linear-gradient(center top , #006B00, #008A00) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#006B00", endColorstr="#008A00");
-    background: -webkit-gradient(linear, left top, left bottom, from(#006B00), to(#008A00));
-	font-size: ' . $font_size_h . 'em;
-    letter-spacing: 0;
-    line-height: ' . $line_height_h . ';
-    padding: 4px;
-    text-transform: none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #CCEBCC;'; }
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #006B00;'; } $css .= '
+color: #EEF0F3;
+background: #006B00;
+background: -moz-linear-gradient(top,  #006B00 0%, #008A00 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006B00), color-stop(100%,#008A00)); 
+background: -webkit-linear-gradient(top,  #006B00 0%,#008A00 100%);
+background: -o-linear-gradient(top,  #006B00 0%,#008A00 100%);
+background: -ms-linear-gradient(top,  #006B00 0%,#008A00 100%);
+background: linear-gradient(to bottom,  #006B00 0%,#008A00 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#006B00", endColorstr="#008A00",GradientType=0 );    
+font-size: ' . $font_size_h . 'em;
+letter-spacing: 0;
+line-height: ' . $line_height_h . ';
+padding: 4px;
+text-transform: none;
+text-align: ' . $table_text_align_h . ';';
+if ($h_borders != '' ) { $css .= 'border-bottom: 1px solid #CCEBCC;'; }
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #006B00;'; } $css .= '
 }
 
 table#' . $id . ' thead tr th#' . $id . '.start {
@@ -965,16 +1025,21 @@ table#' . $id . ' tfoot tr {
 }
 
 table#' . $id . ' tfoot tr td {
-    color: #EEF0F3;
-	background: -moz-linear-gradient(center top , #006B00, #008A00) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#006B00", endColorstr="#008A00");
-    background: -webkit-gradient(linear, left top, left bottom, from(#006B00), to(#008A00));
-	padding: 4px;
-	font-size: ' . $font_size_b . 'em;
-	border-width: 0px;
-	border-top: medium none;
-    text-align: ' . $table_text_align_h . ';';
-	if ($v_borders != '' ) { $css .= 'border-left: 1px solid #006B00;'; } $css .= '
+color: #EEF0F3;
+background: #006B00;
+background: -moz-linear-gradient(top,  #006B00 0%, #008A00 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006B00), color-stop(100%,#008A00)); 
+background: -webkit-linear-gradient(top,  #006B00 0%,#008A00 100%);
+background: -o-linear-gradient(top,  #006B00 0%,#008A00 100%);
+background: -ms-linear-gradient(top,  #006B00 0%,#008A00 100%);
+background: linear-gradient(to bottom,  #006B00 0%,#008A00 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#006B00", endColorstr="#008A00",GradientType=0 );  
+padding: 4px;
+font-size: ' . $font_size_b . 'em;
+border-width: 0px;
+border-top: medium none;
+text-align: ' . $table_text_align_h . ';';
+if ($v_borders != '' ) { $css .= 'border-left: 1px solid #006B00;'; } $css .= '
 }
 ';
 }

@@ -1,10 +1,9 @@
 === Plugin Name ===
 Contributors: Websimon
-Donate link: http://websimon.se/websimon-tables#donate
 Tags: table, tables, css, design, html table, custom tables
 Requires at least: 2.0.3
-Tested up to: 3.5
-Stable tag: 1.3.3
+Tested up to: 3.6.1
+Stable tag: 1.3.4
 
 A plugin to create, manage and design tables within wordpress. 
 Choose between readymade skins or make your own custom table CSS design.
@@ -33,6 +32,11 @@ http://websimon.se/websimon-tables#askaquestion
 If you want to see screenshots of this plugin please visit http://websimon.se/websimon-tables
 
 == Changelog ==
+
+= Version 1.3.4 =
+* Changed - Removed some information
+* Bug fix - changed install function.
+* New Feature - Added support for gradients in IE10+
 
 = Version 1.3.3 =
 * New Feature - Added a beta feature to import .csv files to a table
@@ -76,6 +80,9 @@ If you want to see screenshots of this plugin please visit http://websimon.se/we
 * The plugin is released
 
 == Upgrade Notice ==
+
+= Version 1.3.4 =
+* Important update to support gradients in IE10+
 
 = Version 1.3.3 =
 * Some new features where the largest update is the new BETA feature to import/export tables with .csv. 
